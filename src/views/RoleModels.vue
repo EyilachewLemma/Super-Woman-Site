@@ -1,8 +1,8 @@
 <template>
   <div class="recentRoleModels pb-5">
-    <div class="text-center text-white py-5">ALL PUBLISHED ROLE MODELS</div>
+    <div class="text-center text-white pt-5 pb-2">ALL PUBLISHED ROLE MODELS</div>
     <div class="row mx-2 mx-lg-3">
-      <div class="col-6 col-md-4 col-lg-3" v-for="n in 9" :key="n">
+      <div class="col-6 col-md-4 col-lg-3 mt-3" v-for="n in 9" :key="n">
         <img src="../assets/rolemodel4.jpg" alt="role model image" class="img-fluid rounded w-100" />
         <div class="d-flex justify-content-between mt-3">
           <div class="issue">ISSUE 2022</div>

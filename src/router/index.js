@@ -16,6 +16,11 @@ const routes = [{
             name: 'RoleModels',
             component: () =>
                 import ( /* webpackChunkName: "RoleModels" */ '../views/RoleModels.vue')
+        }, {
+            path: '/role-model-detail',
+            name: 'RoleModelDetail',
+            component: () =>
+                import ( /* webpackChunkName: "RoleModelDetail" */ '../views/RolemodelDetail.vue')
         }, ]
 
     },

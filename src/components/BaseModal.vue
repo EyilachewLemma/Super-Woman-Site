@@ -8,7 +8,7 @@
     aria-labelledby="staticBackdropLabel"
     aria-hidden="true"
   >
-    <div class="modal-dialog">
+    <div class="modal-dialog modal-fullscreen-sm-down">
       <div class="modal-content">
         <div class="modal-body">
           <slot name="modalBody" />

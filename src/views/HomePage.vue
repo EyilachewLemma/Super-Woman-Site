@@ -470,7 +470,7 @@
               type="text"
               class="form-control me-3"
               id="code1"
-              ref="code1"
+              ref="code01"
               v-model="code1"
               @input="setCode($event,'code2')"
             />
@@ -596,7 +596,7 @@
     </div>
   </div>
   <!-- sign up end -->
-  <!-- signup modale -->
+  <!-- signin modale -->
   <div class="signIn">
     <base-modal id="logIninfoModal">
       <template #modalBody>
@@ -608,16 +608,16 @@
             <div class="text-white fs-5 ms-auto me-auto">Sign In</div>
           </div>
           <p class="text-white mt-5">Welcome to Super Woman</p>
-          <div class="mt-3" :class="{ warning: v$.userInfo.phone_no.$error }">
-            <label for="phone" class="form-label text-white">Phone Number</label>
+          <div class="mt-3" :class="{ warning: v$.phone.$error }">
+            <label for="loginphone" class="form-label text-white">Phone Number</label>
             <vue3-phone-input
               class="text-white p-0"
-              v-model="userInfo.phone_no"
+              v-model="phone"
               outlined
-              id="phone"
+              id="loginphone"
             />
             <span
-              v-if="v$.userInfo.phone_no.$error && !userInfo.phone_no?.isValid"
+              v-if="v$.phone.$error && !phone?.isValid"
               class="error-msg mt-1"
             >invalid phone number</span>
           </div>
@@ -681,19 +681,19 @@
           </div>
           <div
             class="text-center text-white my-3"
-          >Enter The code we sent to {{userInfo.phone_no?.number}} via SMS</div>
+          >Enter The code we sent to {{phone?.number}} via SMS</div>
           <div class="d-flex me-3">
             <input
               type="text"
-              class="form-control me-3"
+              class="form-control me-1 me-lg-3"
               id="code1"
-              ref="code1"
+              ref="codeOne"
               v-model="code1"
               @input="setCode($event,'code2')"
             />
             <input
               type="text"
-              class="form-control me-3"
+              class="form-control me-1 me-lg-3"
               id="code2"
               ref="code2"
               v-model="code2"
@@ -701,7 +701,7 @@
             />
             <input
               type="text"
-              class="form-control me-3"
+              class="form-control me-1 me-lg-3"
               id="code3"
               ref="code3"
               v-model="code3"
@@ -709,7 +709,7 @@
             />
             <input
               type="text"
-              class="form-control me-3"
+              class="form-control me-1 me-lg-3"
               id="code4"
               ref="code4"
               v-model="code4"
@@ -717,7 +717,7 @@
             />
             <input
               type="text"
-              class="form-control me-3"
+              class="form-control me-1 me-lg-3"
               id="code5"
               ref="code5"
               v-model="code5"
@@ -725,7 +725,7 @@
             />
             <input
               type="text"
-              class="form-control me-3"
+              class="form-control"
               id="code6"
               ref="code6"
               v-model="code6"
@@ -735,7 +735,7 @@
           <div class="d-flex align-items-center mt-4">
             <div class="text-white me-2">Don't get a code?</div>
             <div class="d-grid gap-2">
-              <button @click="resendCode()" class="resendCode" :disabled="resending">
+              <button @click="resendLoginCode()" class="resendCode" :disabled="resending">
                 <span v-if="resending">
                   <span
                     class="spinner-border spinner-border-sm mx-2"
@@ -750,7 +750,7 @@
           </div>
           <div class="d-grid gap-2">
             <button
-              @click="confirmVerification()"
+              @click="confirmLoginVerification()"
               class="btn w-100 confirmBtn mt-3 text-white"
               :disabled="isDisabled"
             >
@@ -811,6 +811,7 @@ export default {
       notify: "",
       selectedFields: [],
       rememberMe:'',
+      phone:'',
     };
   },
   validations() {
@@ -839,8 +840,11 @@ export default {
             required
           )
         }
-      }
-    };
+      },
+       phone: {
+          required: helpers.withMessage("phone number required",required),
+    }
+    }
   },
 
   created() {
@@ -882,6 +886,9 @@ export default {
           if (response.status === 201) {
             this.infoModal.hide();
             this.confirmModal.show();
+            window.requestAnimationFrame(() => {
+          this.$refs['code01'].focus();
+        });
           }
         } catch (err) {
           console.log(err);
@@ -898,7 +905,7 @@ export default {
           this.$refs[elementId].focus();
           this.verificationCodes.push(event.target.value);
         });
-      } else if (elementId === "codeSix") {
+      } else {
         document.getElementById("code6").blur();
         this.verificationCodes.push(event.target.value);
         this.isDisabled = false;
@@ -918,6 +925,7 @@ export default {
         this.resending = false;
       }
     },
+
     async confirmVerification() {
       if (this.verificationCodes.length * 1 === 6) {
         this.isLoading = true;
@@ -976,13 +984,76 @@ export default {
       this.isFieldModal = false;
       this.logIninfoModal.show();
     },
-    confirmPhoneToLogin(){
-      this.logIninfoModal.hide(); 
-      this.loginConfirmModal.show()
+   async confirmPhoneToLogin(){
+      //  this.isLoading = true;
+      // try {
+      //   var response = await apiClient.post("user/login", {phone_number:this.phone.number});
+      //   if (response.status === 200) {
+      //      this.logIninfoModal.hide(); 
+      //     this.loginConfirmModal.show()
+      //     console.log("user created = ", response.data);
+      //   }
+      // } finally {
+      //   this.isLoading = false;
+      // }
+         window.requestAnimationFrame(() => {
+          this.$refs.codeOne.focus();
+        });
+          this.logIninfoModal.hide(); 
+          this.loginConfirmModal.show()
+         
+     
     },
     backToLoginInfoModal(){
       this.loginConfirmModal.hide()
       this.logIninfoModal.show();    
+    },
+    async resendLoginCode(){
+       try {
+        this.resending = true;
+        var response = await apiClient.post("user/resend", {
+          phone_number: this.phone.number
+        });
+        if (response.status === 200) {
+          localStorage.setItem("tokenu", response.data.access_token);
+        }
+      } finally {
+        this.resending = false;
+      }
+    },
+   async confirmLoginVerification(){
+        if (this.verificationCodes.length * 1 === 6) {
+        this.isLoading = true;
+        var credential = {
+          otp: this.verificationCodes.join(""),
+          phone_number: this.userInfo.phone_no.number
+        };
+        try {
+          this.confirmModal.hide();
+          this.isFieldModal = true;
+          var response = await apiClient.post("user/verify_phone", credential);
+          if (response.status === 200) {
+            localStorage.setItem("tokenu", response.data.access_token);
+            this.confirmModal.hide();
+            this.isFieldModal = true;
+          }
+        } finally {
+          this.isLoading = false;
+        }
+      }
+    },
+    saveUserData(response){
+            apiClient.defaults.headers.common["Authorization"] = `Bearer ${response.data.access_token}`;
+            this.$store.commit("setUser", response.data.user);
+            this.$store.commit("setIsAuthenticated", true);
+            let user = response.data.user;
+
+            localStorage.setItem("tokenu", response.data.access_token);
+            localStorage.setItem("supUser", JSON.stringify(user));
+            localStorage.setItem("legal", true);
+
+            let toPath = this.$route.query.to || "/";
+            this.$router.push(toPath);
     }
 
   }

@@ -1,7 +1,10 @@
 import { createStore } from 'vuex'
 import apiClient from '../url/index'
-
+import auth from './auth'
 export default createStore({
+    modules: {
+        auth
+    },
     state: {
         fields: [],
         educationLebles: [],
@@ -96,6 +99,6 @@ export default createStore({
                 commit('setIsLoading', false)
             }
         }
-    },
-    modules: {}
+    }
+
 })

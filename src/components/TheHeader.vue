@@ -352,6 +352,181 @@
       </div>
     </div>
   </div>
+  <!-- sign up end -->
+   <!-- signin modale -->
+  <div class="signIn">
+    <base-modal id="logIninfoModal">
+      <template #modalBody>
+        <div class="px-2 py-3 px-lg-5">
+          <div class="d-flex">
+            <button @click="logIninfoModal.hide()" class="text-white backBtn fs-4">
+              <i class="fas fa-times"></i>
+            </button>
+            <div class="text-white fs-5 ms-auto me-auto">Sign In</div>
+          </div>
+          <p class="text-white mt-5">Welcome to Super Woman</p>
+          <div class="mt-3" :class="{ warning: v$.phone.$error }">
+            <label for="loginphone" class="form-label text-white">Phone Number</label>
+            <vue3-phone-input
+              class="text-white p-0"
+              v-model="phone"
+              outlined
+              id="loginphone"
+            />
+            <span
+              v-if="v$.phone.$error && !phone?.isValid"
+              class="error-msg mt-1"
+            >invalid phone number</span>
+          </div>
+          <p class="text-white mt-3">We will call or text to confirm your phone number </p>
+          <div class="form-check mt-3">
+  <input class="form-check-input" type="checkbox" id="rememberMe" v-model="rememberMe">
+  <label class="form-check-label text-white" for="rememberMe">
+    Remember me
+  </label>
+</div>
+          <div class="d-grid gap-2">
+            <button
+              @click="confirmPhoneToLogin()"
+              class="btn w-100 confirmBtn mt-3 text-white"
+              :disabled="isLoading"
+            >
+              <span v-if="isLoading">
+                <span
+                  class="spinner-border spinner-border-sm mx-2"
+                  role="status"
+                  aria-hidden="true"
+                ></span>
+                <span>Wait...</span>
+              </span>
+              <span v-else>Continue</span>
+            </button>
+            <p class="text-danger text-center small">{{ notify }}</p>
+          </div>
+          <div class="d-flex mt-3">
+             <p class="text-white me-2">Don't have an account?</p>
+             <button @click="gotoSignup()" class="profBtn insteadSignUp">Sign Up</button>
+          </div>
+          <div class="d-flex align-items-center mt-4">
+            <div class="borderBottom flex-fill"></div>
+            <p class="text-white ms-5 flex-fill">or sign in with</p>
+            <div class="borderBottom flex-fill"></div>
+          </div>
+          <div class="d-flex justify-content-between mt-3">
+            <div class="border rounded loginWith p-2 me-5">
+              <img src="../assets/facebooklogo.jpg" class="img-fluid" alt="facebook logo" />
+            </div>
+            <div class="border rounded loginWith p-2 me-5">
+               <img src="../assets/googlelogo.png" class="img-fluid" alt="google logo" />
+            </div>
+            <div class="border rounded loginWith p-2">
+              <img src="../assets/linkedinlogo.jpg" class="img-fluid" alt="linkedin logo" />
+            </div>
+          </div>
+        </div>
+      </template>
+    </base-modal>
+    <!-- phone number verification for sign in -->
+        <base-modal id="loginConfirmModal">
+      <template #modalBody>
+        <div class="px-2 py-3 px-lg-4">
+          <div class="d-flex">
+            <button @click="backToLoginInfoModal()" class="text-white backBtn fs-4">
+              <i class="fas fa-angle-left"></i>
+            </button>
+            <div class="text-white fs-5 ms-auto me-auto">Sign In</div>
+          </div>
+          <div
+            class="text-center text-white my-3"
+          >Enter The code we sent to {{phone?.number}} via SMS</div>
+          <div class="d-flex me-3">
+            <input
+              type="text"
+              class="form-control me-1 me-lg-3"
+              id="code1"
+              ref="codeOne"
+              v-model="code1"
+              @input="setCode($event,'code2')"
+            />
+            <input
+              type="text"
+              class="form-control me-1 me-lg-3"
+              id="code2"
+              ref="code2"
+              v-model="code2"
+              @input="setCode($event,'code3')"
+            />
+            <input
+              type="text"
+              class="form-control me-1 me-lg-3"
+              id="code3"
+              ref="code3"
+              v-model="code3"
+              @input="setCode($event,'code4')"
+            />
+            <input
+              type="text"
+              class="form-control me-1 me-lg-3"
+              id="code4"
+              ref="code4"
+              v-model="code4"
+              @input="setCode($event,'code5')"
+            />
+            <input
+              type="text"
+              class="form-control me-1 me-lg-3"
+              id="code5"
+              ref="code5"
+              v-model="code5"
+              @input="setCode($event,'code6')"
+            />
+            <input
+              type="text"
+              class="form-control"
+              id="code6"
+              ref="code6"
+              v-model="code6"
+              @input="setCode($event,'codeSix')"
+            />
+          </div>
+          <div class="d-flex align-items-center mt-4">
+            <div class="text-white me-2">Don't get a code?</div>
+            <div class="d-grid gap-2">
+              <button @click="resendLoginCode()" class="resendCode" :disabled="resending">
+                <span v-if="resending">
+                  <span
+                    class="spinner-border spinner-border-sm mx-2"
+                    role="status"
+                    aria-hidden="true"
+                  ></span>
+                  <span>Wait...</span>
+                </span>
+                <span v-else>Resend Code</span>
+              </button>
+            </div>
+          </div>
+          <div class="d-grid gap-2">
+            <button
+              @click="confirmLoginVerification()"
+              class="btn w-100 confirmBtn mt-3 text-white"
+              :disabled="isDisabled"
+            >
+              <span v-if="isLoading">
+                <span
+                  class="spinner-border spinner-border-sm mx-2"
+                  role="status"
+                  aria-hidden="true"
+                ></span>
+                <span>Validating</span>
+              </span>
+              <span v-else>Confirm</span>
+            </button>
+            <p class="text-danger text-center small">{{ notify }}</p>
+          </div>
+        </div>
+      </template>
+    </base-modal>
+  </div>
 </template>
 <script>
 import useValidate from "@vuelidate/core";
@@ -368,6 +543,8 @@ export default {
       v$: useValidate(),
       infoModal: null,
       confirmModal: null,
+      logIninfoModal:null,
+      loginConfirmModal:null,
       userInfo: {},
       interests: [],
       code1: "",
@@ -383,7 +560,8 @@ export default {
       resending:false,
       notify: "",
       selectedFields: [],
-      phone:''
+      phone:'',
+      rememberMe:'',
     };
   },
   validations() {
@@ -407,7 +585,10 @@ export default {
             required
           )
         }
-      }
+      },
+        phone: {
+          required: helpers.withMessage("phone number required",required),
+    }
     };
   },
   beforeCreate() {
@@ -416,6 +597,8 @@ export default {
   mounted() {
     this.infoModal = new Modal(document.getElementById("infoModal"));
     this.confirmModal = new Modal(document.getElementById("confirmModal"));
+     this.logIninfoModal = new Modal(document.getElementById("logIninfoModal"));
+     this.loginConfirmModal = new Modal(document.getElementById("loginConfirmModal"));
   },
   computed: {
     educationLebles() {
@@ -523,6 +706,84 @@ export default {
       } finally {
         this.isLoading = false;
       }
+    },
+    // sign in
+      gotoLogin() {
+      this.infoModal.hide();
+      this.confirmModal.hide();
+      this.isFieldModal = false;
+      this.logIninfoModal.show();
+    },
+   async confirmPhoneToLogin(){
+      //  this.isLoading = true;
+      // try {
+      //   var response = await apiClient.post("user/login", {phone_number:this.phone.number});
+      //   if (response.status === 200) {
+      //      this.logIninfoModal.hide(); 
+      //     this.loginConfirmModal.show()
+      //     console.log("user created = ", response.data);
+      //   }
+      // } finally {
+      //   this.isLoading = false;
+      // }
+         window.requestAnimationFrame(() => {
+          this.$refs.codeOne.focus();
+        });
+          this.logIninfoModal.hide(); 
+          this.loginConfirmModal.show()
+         
+     
+    },
+    backToLoginInfoModal(){
+      this.loginConfirmModal.hide()
+      this.logIninfoModal.show();    
+    },
+    async resendLoginCode(){
+       try {
+        this.resending = true;
+        var response = await apiClient.post("user/resend", {
+          phone_number: this.phone.number
+        });
+        if (response.status === 200) {
+          localStorage.setItem("tokenu", response.data.access_token);
+        }
+      } finally {
+        this.resending = false;
+      }
+    },
+   async confirmLoginVerification(){
+        if (this.verificationCodes.length * 1 === 6) {
+        this.isLoading = true;
+        var credential = {
+          otp: this.verificationCodes.join(""),
+          phone_number: this.userInfo.phone_no.number
+        };
+        try {
+          this.confirmModal.hide();
+          this.isFieldModal = true;
+          var response = await apiClient.post("user/verify_phone", credential);
+          if (response.status === 200) {
+            localStorage.setItem("tokenu", response.data.access_token);
+            this.confirmModal.hide();
+            this.isFieldModal = true;
+          }
+        } finally {
+          this.isLoading = false;
+        }
+      }
+    },
+    saveUserData(response){
+            apiClient.defaults.headers.common["Authorization"] = `Bearer ${response.data.access_token}`;
+            this.$store.commit("setUser", response.data.user);
+            this.$store.commit("setIsAuthenticated", true);
+            let user = response.data.user;
+
+            localStorage.setItem("tokenu", response.data.access_token);
+            localStorage.setItem("supUser", JSON.stringify(user));
+            localStorage.setItem("legal", true);
+
+            let toPath = this.$route.query.to || "/";
+            this.$router.push(toPath);
     }
   }
 };
@@ -580,7 +841,7 @@ nav .navBakgound {
 }
 
 /* for sign up */
-.signUp {
+.signUp,.signIn {
   position: absolute;
   top: 10%;
   text-align: left;
@@ -648,6 +909,19 @@ select {
 .warning span {
   display: inline;
   color: red;
+}
+.insteadSignUp{
+  color: #e7453a;
+}
+#rememberMe{
+  background-color: #e7453a;
+}
+.borderBottom{
+  border-bottom: 1px solid #fff;
+}
+.loginWith img{
+max-width: 30%;
+margin: auto;
 }
 @media (max-width: 768px) {
   .fieldContainer {
