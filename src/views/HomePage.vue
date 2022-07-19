@@ -14,7 +14,7 @@
           </router-link>
         </div>
         <div class="d-flex mt-2">
-          <router-link to="#" class="text-white text-decoration-none me-4">Role Models</router-link>
+          <router-link :to="{name:'RoleModels'}" class="text-white text-decoration-none me-4">Role Models</router-link>
           <router-link to="#" class="text-white text-decoration-none">Blog</router-link>
         </div>
         <div class="d-flex align-items-center">
@@ -227,10 +227,14 @@
   <div class="recentRoleModels pb-5">
     <div class="text-center text-white py-5">RECENT PUBLISHED ROLE MODELS</div>
     <div class="row mx-2 mx-lg-3">
-      <div class="col-6 col-md-4 col-lg-3" v-for="n in 4" :key="n">
-        <img src="../assets/rolemodel1.jpg" alt="role model image" class="img-fluid rounded w-100" />
-        <div class="d-flex justify-content-between mt-3">
-          <div class="issue">ISSUE 2022</div>
+      <div class="col-6 col-md-4 col-lg-3 mt-3" v-for="n in 4" :key="n">
+       <div class="imgContainer">
+        <router-link :to="{name:'RoleModelDetail',params:{rolemodelId:1}}">
+           <img src="../assets/rolemodel1.jpg" alt="role model image" class="img-fluid rounded w-100" />
+        </router-link>
+       </div>
+        <div class="d-flex justify-content-between mt-1">
+          <div class="issue d-none d-md-block">ISSUE 2022</div>
           <div class="d-flex">
             <p class="text-white me-3">
               1.2k
@@ -264,16 +268,16 @@
     <div class="slightDark">
       <div class="row mx-2 mx-lg-3">
         <div class="col-6 col-md-4 col-lg-3 blogImage" v-for="n in 4" :key="n">
-          <img
-            src="../assets/rolemodel2.jpg"
-            alt="role model image"
-            class="img-fluid rounded w-100"
-          />
+        <div class="imgContainer">
+        <router-link :to="{name:'RoleModelDetail',params:{rolemodelId:1}}">
+           <img src="../assets/rolemodel2.jpg" alt="blog image" class="img-fluid rounded w-100" />
+        </router-link>
+       </div>
           <div class="mt-3">
-            <div class="fw-bold text-white">How to be a successful woman in Africa ?</div>
+            <div class="fw-bold text-white blog">How to become a successful woman in Africa ?</div>
             <div
-              class="text-white small"
-            >Lorem ipsum dolor sit amet consectetur adipisicing elit. Consequatur iusto suscipit modi animi? Magni quidem quia atque, fugit voluptates accusamus?</div>
+              class="text-white small blog"
+            >Lorem ipsum dolor sit amet consecteturs accusamus?</div>
             <div class="d-flex justify-content-between mt-3">
               <div class="issue">7 minute read</div>
               <div class="d-flex">
@@ -333,7 +337,7 @@
     <div class="findMentorBox px-2 py-5 px-lg-5">
       <div class="text-white pt-lg-3">ARE YOU LOOKING A MENTOR WHO HELP YOU ON YOUR DREAM</div>
       <div class="mt-3 mt-lg-5 text-center">
-        <button class="btn findMentorBtn text-black">
+        <button @click="$router.push({name:'Mentors'})" class="btn findMentorBtn text-black">
           FIND MENTOR
           <span class="fs-5 ms-5">
             <i class="fas fa-arrow-right"></i>
@@ -355,14 +359,8 @@
           </div>
           <div class="mb-3" :class="{ warning: v$.userInfo.first_name.$error }">
             <label for="fname" class="form-label text-white">First Name</label>
-            <input
-              class="form-control"
-              type="text"
-              id="fname"
-              aria-label="default input example"
-              v-model="userInfo.first_name"
-            />
-            <span class="error-msg mt-1">
+            <input class="form-control" type="text" id="fname" aria-label="default input example" v-model="userInfo.first_name" />
+             <span class="error-msg mt-1">
               {{
               v$.userInfo.first_name.$errors[0]?.$message
               }}
@@ -418,16 +416,16 @@
               }}
             </span>
           </div>
-          <div :class="{ warning: v$.userInfo.phone_no.$error }">
+          <div :class="{ warning: v$.phone.$error }">
             <label for="phone" class="form-label text-white">Phone Number</label>
             <vue3-phone-input
               class="text-white p-0"
-              v-model="userInfo.phone_no"
+              v-model="phone"
               outlined
               id="phone"
             />
             <span
-              v-if="v$.userInfo.phone_no.$error && !userInfo.phone_no?.isValid"
+              v-if="v$.phone.$error && !phone?.isValid"
               class="error-msg mt-1"
             >invalid phone number</span>
           </div>
@@ -464,19 +462,21 @@
           </div>
           <div
             class="text-center text-white my-3"
-          >Enter The code we sent to {{userInfo.phone_no?.number}} via SMS</div>
+          >Enter The code we sent to {{phone?.number}} via SMS</div>
           <div class="d-flex me-3">
             <input
               type="text"
               class="form-control me-3"
+              maxlength="1"
               id="code1"
-              ref="code01"
+              ref="code1"
               v-model="code1"
               @input="setCode($event,'code2')"
             />
             <input
               type="text"
               class="form-control me-3"
+              maxlength="1"
               id="code2"
               ref="code2"
               v-model="code2"
@@ -485,6 +485,7 @@
             <input
               type="text"
               class="form-control me-3"
+              maxlength="1"
               id="code3"
               ref="code3"
               v-model="code3"
@@ -493,6 +494,7 @@
             <input
               type="text"
               class="form-control me-3"
+              maxlength="1"
               id="code4"
               ref="code4"
               v-model="code4"
@@ -501,6 +503,7 @@
             <input
               type="text"
               class="form-control me-3"
+              maxlength="1"
               id="code5"
               ref="code5"
               v-model="code5"
@@ -509,6 +512,7 @@
             <input
               type="text"
               class="form-control me-3"
+              maxlength="1"
               id="code6"
               ref="code6"
               v-model="code6"
@@ -686,50 +690,56 @@
             <input
               type="text"
               class="form-control me-1 me-lg-3"
-              id="code1"
-              ref="codeOne"
+              maxlength="1"
+              id="loginCode1"
+              ref="loginCode1"
               v-model="code1"
-              @input="setCode($event,'code2')"
+              @input="setLoginCode($event,'loginCode2')"
             />
             <input
               type="text"
               class="form-control me-1 me-lg-3"
-              id="code2"
-              ref="code2"
+              maxlength="1"
+              id="loginCode2"
+              ref="loginCode2"
               v-model="code2"
-              @input="setCode($event,'code3')"
+              @input="setLoginCode($event,'loginCode3')"
             />
             <input
               type="text"
               class="form-control me-1 me-lg-3"
-              id="code3"
-              ref="code3"
+              maxlength="1"
+              id="loginCode3"
+              ref="loginCode3"
               v-model="code3"
-              @input="setCode($event,'code4')"
+              @input="setLoginCode($event,'loginCode4')"
             />
             <input
               type="text"
               class="form-control me-1 me-lg-3"
-              id="code4"
-              ref="code4"
+              maxlength="1"
+              id="loginCode4"
+              ref="loginCode4"
               v-model="code4"
-              @input="setCode($event,'code5')"
+              @input="setLoginCode($event,'loginCode5')"
             />
             <input
               type="text"
               class="form-control me-1 me-lg-3"
-              id="code5"
-              ref="code5"
+              maxlength="1"
+              id="loginCode5"
+              ref="loginCode5"
               v-model="code5"
-              @input="setCode($event,'code6')"
+              @input="setLoginCode($event,'loginCode6')"
             />
             <input
               type="text"
               class="form-control"
-              id="code6"
-              ref="code6"
+              maxlength="1"
+              id="loginCode6"
+              ref="loginCode6"
               v-model="code6"
-              @input="setCode($event,'codeSix')"
+              @input="setLoginCode($event,'loginCodeSix')"
             />
           </div>
           <div class="d-flex align-items-center mt-4">
@@ -779,7 +789,7 @@ import TheFooter from "../components/TheFooter.vue";
 // import BottomNav from '../components/BottomNav.vue'
 import apiClient from "../url";
 import useValidate from "@vuelidate/core";
-import { required, helpers, minLength, maxLength } from "@vuelidate/validators";
+import { required, helpers} from "@vuelidate/validators";
 import { Modal } from "bootstrap";
 import Vue3PhoneInput from "vue3-phone-input";
 export default {
@@ -812,6 +822,7 @@ export default {
       selectedFields: [],
       rememberMe:'',
       phone:'',
+      resending:false,
     };
   },
   validations() {
@@ -822,15 +833,7 @@ export default {
         },
         last_name: {
           required: helpers.withMessage("last name can not be empty", required)
-        },
-        phone_no: {
-          required: helpers.withMessage(
-            "phone number can not be empty",
-            required
-          ),
-          min: helpers.withMessage("invalid phone number", minLength(9)),
-          max: helpers.withMessage("invalid phone number", maxLength(10))
-        },
+        },   
         date_of_birth: {
           required: helpers.withMessage("birth date is required", required)
         },
@@ -862,7 +865,7 @@ export default {
       return this.$store.getters.educationLebles;
     },
     fields() {
-      return this.$store.getters.educationLebles;
+      return this.$store.getters.fields;
     }
   },
   methods: {
@@ -878,22 +881,28 @@ export default {
       this.infoModal.show();
     },
     async registerUser() {
-      this.v$.userInfo.$validate();
-      if (!this.v$.userInfo.$error && this.userInfo.phone_no?.isValid) {
-        this.userInfo.phone_number = this.userInfo.phone_no.number;
-        try {
-          var response = await apiClient.post("user/register", this.userInfo);
-          if (response.status === 201) {
-            this.infoModal.hide();
+      // this.v$.userInfo.$validate();
+      // this.v$.phone.$validate();
+      // if (!this.v$.userInfo.$error && this.phone?.isValid) {
+      //   this.userInfo.phone_number = this.phone.number;
+      //   try {
+      //     var response = await apiClient.post("user/register", this.userInfo);
+      //     if (response.status === 201) {
+      //       this.infoModal.hide();
+      //       this.confirmModal.show();
+      //       window.requestAnimationFrame(() => {
+      //     this.$refs['code01'].focus();
+      //   });
+      //     }
+      //   } catch (err) {
+      //     console.log(err);
+      //   }
+      // }
+      this.infoModal.hide();
             this.confirmModal.show();
-            window.requestAnimationFrame(() => {
-          this.$refs['code01'].focus();
-        });
-          }
-        } catch (err) {
-          console.log(err);
-        }
-      }
+          window.requestAnimationFrame(() => {
+           this.$refs.code.focus();
+         });
     },
     backToInfoModal() {
       this.confirmModal.hide();
@@ -912,11 +921,24 @@ export default {
         console.log("length of code = ", this.verificationCodes.length);
       }
     },
+    setLoginCode(event, elementRef) {
+      if (elementRef !== "loginCodeSix" && event.target.value) {
+        window.requestAnimationFrame(() => {
+          this.$refs[elementRef].focus();
+          this.verificationCodes.push(event.target.value);
+        });
+      } else {
+        document.getElementById("code6").blur();
+        this.verificationCodes.push(event.target.value);
+        this.isDisabled = false;
+        console.log("length of code = ", this.verificationCodes.length);
+      }
+    },
     async resendCode() {
       try {
         this.resending = true;
         var response = await apiClient.post("user/resend", {
-          phone_number: this.userInfo.phone_no.number
+          phone_number: this.phone.number
         });
         if (response.status === 200) {
           localStorage.setItem("tokenu", response.data.access_token);
@@ -931,7 +953,7 @@ export default {
         this.isLoading = true;
         var credential = {
           otp: this.verificationCodes.join(""),
-          phone_number: this.userInfo.phone_no.number
+          phone_number: this.phone.number
         };
         try {
           this.confirmModal.hide();
@@ -1026,7 +1048,7 @@ export default {
         this.isLoading = true;
         var credential = {
           otp: this.verificationCodes.join(""),
-          phone_number: this.userInfo.phone_no.number
+          phone_number: this.phone.number
         };
         try {
           this.confirmModal.hide();
@@ -1204,11 +1226,25 @@ nav .navBakgound {
 .recentRoleModels {
   background-color: #0f0e1c;
 }
+.imgContainer{
+  width: 100%;
+  overflow: hidden;
+}
+.imgContainer img{
+  width: 100%;
+  transition: all 1s;
+}
+.imgContainer img:hover{
+  transform: scale(1.5);
+}
 .issue {
   color: #f69f83;
 }
 .review {
   color: #e7453a;
+}
+.blog{
+  text-align: left;
 }
 .recentBlogs {
   background-color: #0f0e1c;

@@ -29,7 +29,7 @@
 <!-- end of carousel section -->
 <div class="d-flex mt-4 py-2">
    <div class="fs-5 fw-bold text-white">Role model totle here</div>
-   <div class="ms-5 text-white">
+   <div class="ms-5 text-white d-none d-md-block">
     <span>Issue Date:</span>
     <span> 7/17/2022</span>
    </div>
@@ -58,17 +58,21 @@
 </div>
 </div>
 <div class="borderBottom"></div>
-<div class="comentSection px-3 pt-3 px-lg-5 py-lg-5">
+<div class="comentSection px-3 py-3 px-lg-5 py-lg-5">
   <div class="row pt-3"> 
     <div class="col-md-7 me-lg-5">
       <p class="text-white fw-bold">Comments(6)</p>
       <div class="d-flex mt-3 mt-3">
         <p class="text-white fs-4 me-2"><i class="fas fa-user"></i></p>
-     <input @keyup.enter="sendComment()" class="form-control form-control-lg border comentInput" type="text" placeholder="write your comment here" aria-label=".form-control-lg example" v-model="comment">
+     <div class="w-100" :class="{warning:v$.comment.$error}">
+      <input @keyup.enter="sendComment()" class="form-control form-control-lg border comentInput" type="text" placeholder="write your comment here" aria-label=".form-control-lg example" v-model="comment">
+     <span class="error-msg mt-1">{{v$.comment.$errors[0]?.$message}}
+            </span>
+     </div>
       </div>
       <div class="mt-2 text-white"> there is no comment yet</div>
       </div>
-      <div class="col-md-4">
+      <div class="col-md-4 d-none d-md-block">
         <p class="text-white">Related Role Models</p>
         <div v-for="n in 5" :key="n" class="mt-2">
         <div class="row">
@@ -85,15 +89,51 @@
   </div>
 </template>
 <script>
+import apiClient from '@/url/index'
+import useValidate from "@vuelidate/core";
+import { required, helpers} from "@vuelidate/validators";
 export default {
+  props:['rolemodelId'],
   data() {
     return {
-      comment:''
+      v$:useValidate(),
+      comment:'',
+      roleModelDetails:{}
     }
   },
+  validations() {
+    return {
+    comment:{
+      required:helpers.withMessage('empty comment can not be submited',required)
+    }
+    }
+    },
   methods: {
-    sendComment(){
-
+   async fetchRoleModelDetail(){
+      this.$store.commit('setIsLoading',true)
+      try{
+        var response = await apiClient.get(`api/role_model_detail/${this.roleModelId}`)
+        if(response.status === 200){
+           this.roleModelDetails = response.data
+        }
+      }
+      finally{
+        this.$store.commit('setIsLoading',false)
+      }
+    },
+    async sendComment(){
+      this.v$.comment.$validate()
+      if(!this.v$.comment.$error){
+          try{
+        var response = await apiClient.post(`api/role_model_comment/${this.roleModelId}`,this.comment)
+        if(response.status === 200){
+           this.roleModelDetails = response.data
+        }
+      }
+      finally{
+        this.$store.commit('setIsLoading',false)
+      }
+      }
     },
     async listenAudio(){
   //     let sound = await import('../../recordings/sound.mp4');
@@ -137,4 +177,11 @@ img{
   width: 20vw;
   height: 20vh;
 } 
+.warning input {
+  border: 1px red solid;
+}
+.warning span {
+  display: inline;
+  color: red;
+}
 </style>

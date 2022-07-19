@@ -39,8 +39,8 @@
             </li>
           </ul>
         </div>
-        <div class="dropdown p-0 ms-4">
-          <button
+       <!-- <div class="dropdown p-0 ms-4">
+           <button
             class="btn profileBtn rounded-pill text-white py-0"
             type="button"
             id="dropdownMenuButton1"
@@ -62,7 +62,7 @@
               <button class="text-white">Logout</button>
             </li>
           </ul>
-        </div>
+        </div> -->
         <button @click="gotoLogin()" class="profBtn text-white ms-2 me-2">Login</button>
         <button @click="gotoSignup()" class="profBtn text-white">SignUp</button>
       </div>
@@ -223,6 +223,7 @@
             <input
               type="text"
               class="form-control me-3"
+              maxlength="1"
               id="code1"
               ref="code1"
               v-model="code1"
@@ -231,6 +232,7 @@
             <input
               type="text"
               class="form-control me-3"
+              maxlength="1"
               id="code2"
               ref="code2"
               v-model="code2"
@@ -239,6 +241,7 @@
             <input
               type="text"
               class="form-control me-3"
+              maxlength="1"
               id="code3"
               ref="code3"
               v-model="code3"
@@ -247,6 +250,7 @@
             <input
               type="text"
               class="form-control me-3"
+              maxlength="1"
               id="code4"
               ref="code4"
               v-model="code4"
@@ -255,6 +259,7 @@
             <input
               type="text"
               class="form-control me-3"
+              maxlength="1"
               id="code5"
               ref="code5"
               v-model="code5"
@@ -263,6 +268,7 @@
             <input
               type="text"
               class="form-control me-3"
+              maxlength="1"
               id="code6"
               ref="code6"
               v-model="code6"
@@ -443,50 +449,56 @@
             <input
               type="text"
               class="form-control me-1 me-lg-3"
-              id="code1"
-              ref="codeOne"
+              maxlength="1"
+              id="loginCode1"
+              ref="loginCode1"
               v-model="code1"
-              @input="setCode($event,'code2')"
+              @input="setLoginCode($event,'loginCode2')"
             />
             <input
               type="text"
               class="form-control me-1 me-lg-3"
-              id="code2"
-              ref="code2"
+              maxlength="1"
+              id="loginCode2"
+              ref="loginCode2"
               v-model="code2"
-              @input="setCode($event,'code3')"
+              @input="setLoginCode($event,'loginCode3')"
             />
             <input
               type="text"
               class="form-control me-1 me-lg-3"
-              id="code3"
-              ref="code3"
+              maxlength="1"
+              id="loginCode3"
+              ref="loginCode3"
               v-model="code3"
-              @input="setCode($event,'code4')"
+              @input="setLoginCode($event,'loginCode4')"
             />
             <input
               type="text"
               class="form-control me-1 me-lg-3"
-              id="code4"
-              ref="code4"
+              maxlength="1"
+              id="loginCode4"
+              ref="loginCode4"
               v-model="code4"
-              @input="setCode($event,'code5')"
+              @input="setLoginCode($event,'loginCode5')"
             />
             <input
               type="text"
               class="form-control me-1 me-lg-3"
-              id="code5"
-              ref="code5"
+              maxlength="1"
+              id="loginCode5"
+              ref="loginCode5"
               v-model="code5"
-              @input="setCode($event,'code6')"
+              @input="setLoginCode($event,'loginCode6')"
             />
             <input
               type="text"
               class="form-control"
-              id="code6"
-              ref="code6"
+              maxlength="1"
+              id="loginCode6"
+              ref="loginCode6"
               v-model="code6"
-              @input="setCode($event,'codeSix')"
+              @input="setLoginCode($event,'loginCodeSix')"
             />
           </div>
           <div class="d-flex align-items-center mt-4">
@@ -637,6 +649,7 @@ export default {
         window.requestAnimationFrame(() => {
           this.$refs[elementId].focus();
           this.verificationCodes.push(event.target.value);
+          console.log("length of code = ", this.verificationCodes.length);
         });
       } else if (elementId === "codeSix") {
         document.getElementById("code6").blur();
@@ -730,10 +743,24 @@ export default {
           this.$refs.codeOne.focus();
         });
           this.logIninfoModal.hide(); 
-          this.loginConfirmModal.show()
-         
+          this.loginConfirmModal.show()        
      
     },
+     setLoginCode(event, elementId) {
+      if (elementId !== "loginCodeSix" && event.target.value) {
+        window.requestAnimationFrame(() => {
+          this.$refs[elementId].focus();
+          this.verificationCodes.push(event.target.value);
+          console.log("length of code = ", this.verificationCodes.length);
+        });
+      } else if (elementId === "loginCodeSix") {
+        document.getElementById("code6").blur();
+        this.verificationCodes.push(event.target.value);
+        this.isDisabled = false;
+        console.log("length of code = ", this.verificationCodes.length);
+      }
+    },
+
     backToLoginInfoModal(){
       this.loginConfirmModal.hide()
       this.logIninfoModal.show();    

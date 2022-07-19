@@ -17,10 +17,16 @@ const routes = [{
             component: () =>
                 import ( /* webpackChunkName: "RoleModels" */ '../views/RoleModels.vue')
         }, {
-            path: '/role-model-detail',
+            path: '/role-model-detail/:rolemodelId',
             name: 'RoleModelDetail',
+            props: true,
             component: () =>
                 import ( /* webpackChunkName: "RoleModelDetail" */ '../views/RolemodelDetail.vue')
+        }, {
+            path: '/mentors',
+            name: 'Mentors',
+            component: () =>
+                import ( /* webpackChunkName: "Mentors" */ '../views/MentorList.vue')
         }, ]
 
     },

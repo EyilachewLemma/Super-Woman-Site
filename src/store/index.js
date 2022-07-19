@@ -25,7 +25,7 @@ export default createStore({
         blogs(state) {
             return state.blogs
         },
-        setIsLoading(state, isLoading) {
+        isLoading(state, isLoading) {
             state.isLoading = isLoading
         }
     },
@@ -41,6 +41,9 @@ export default createStore({
         },
         setBlogs(state, bolgs) {
             state.blogs = bolgs
+        },
+        setIsLoading(state, isLoading) {
+            state.isLoading = isLoading
         }
     },
     actions: {
