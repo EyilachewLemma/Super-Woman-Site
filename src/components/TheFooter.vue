@@ -7,10 +7,10 @@
           <router-link to="#" class="text-white">About Us</router-link>
         </div>
         <div class="mb-3">
-          <router-link to="#" class="text-white">Role Models</router-link>
+          <router-link :to="{name:'RoleModels'}" class="text-white">Role Models</router-link>
         </div>
         <div class="mb-3">
-          <router-link to="#" class="text-white">Mentors</router-link>
+          <router-link :to="{name:'Mentors'}" class="text-white">Mentors</router-link>
         </div>
         <div class="mb-3">
           <router-link to="#" class="text-white">Blogs</router-link>

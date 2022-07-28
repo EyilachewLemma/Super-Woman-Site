@@ -1,6 +1,6 @@
 <template>
-    <div class="wraper">
-        <div class="text-center text-white px-3 pt-4 px-lg-4">Mentors Lists</div>
+    <div class="wraper pb-5">
+        <div class="text-center text-white px-3 pt-4 px-lg-4 fw-bold">Mentors Lists</div>
         <div class="d-flex align-items-center mt-2 px-3 pt-3 px-lg-4">
             <div class="input-group mb-3 border searchContainer me-md-5">
              <input type="text" class="form-control" placeholder="Search Mentors" aria-label="Recipient's username" aria-describedby="button-addon2">
@@ -17,18 +17,23 @@
         </div>
        <div class="d-none d-md-block">
          <div class="row mx-2 mx-lg-3">
-           <div class="col-md-4 col-lg-3 mt-3" v-for="n in 15" :key="n">
+           <div class="col-md-4 col-lg-3 mt-3" v-for="mentor in mentors.data" :key="mentor.id">
            <div class="border px-1 py-3">
              <div class="d-flex justify-content-center">
-                <p class="profileCircle rounded-circle text-white p-4">AK</p>
+                <p class="profileCircle rounded-circle text-white p-4">{{mentor.first_name.charAt(0)+mentor.last_name.charAt(0)}}</p>
                 </div>
-            <div class="mt-3 px-3">
-                <p class="text-white">Eden Getachew</p>
-                <p class="text-white">Data scientist,IA Engineer</p>
-                <p class="text-white">Lorem ipsum, dolor sit amet consectetur adipisicing elit. Eius culpa tempora saepe.</p>
+            <div class="mt-3 px-2">
+                <p class="text-white text-center">{{mentor.first_name+' '+mentor.last_name}}</p>
+                <p class="text-white text-center">
+                    <span v-for="experience in mentor.experiances" :key="experience.id">{{experience.position}}</span>
+                </p>
+                <p class="text-white text-center"></p>
             </div>
-            <button @click="sendMentorRequest()" class="btn sendRequest text-white px-0 px-lg-1">Send Mentor Request</button>
-            <button @click="viewMentorProfile()" class="btn viewProfile text-white mt-2">View Profile</button>
+           
+            <div class="px-2 mt-3">
+            <button @click="sendMentorRequest(mentor.id)" class="btn sendRequest text-white px-0 px-lg-1">Send Mentor Request</button>
+            <button @click="viewMentorProfile(mentor)" class="btn viewProfile text-white mt-3">View Profile</button>
+           </div>
            </div>
            </div>
         </div>
@@ -39,28 +44,96 @@
             <button class="border interestBtn w-25 me-2 text-white p-2" v-for="n in 15" :key="n" >Computer Science</button>
         </div>
         <div class="mt-3 px-3">
-            <div class="pb-3" v-for="n in 15" :key="n">
-                <router-link to="#" class="text-decoration-none">
-                    <div class="d-flex">
-                <p class="align-self-center profileCircle smProfileCircle rounded-circle text-white p-4 me-3">AK</p>
-                   <div class="text-white text-start">Lorem ipsum dolor sit, amet consectetur adipisicing elit. Deserunt, exercitationem odio. Cumque excepturi explicabo illo.</div>
+            <div class="pb-3" v-for="mentor in mentors.data"  :key="mentor.id">
+                    <div @click="viewMentorProfile(mentor)" class="d-flex profileContainer">
+                <p class="align-self-center profileCircle smProfileCircle rounded-circle text-white p-3 me-3">{{mentor.first_name.charAt(0)+mentor.last_name.charAt(0)}}</p>
+                   <div class="text-white">
+                    <span v-for="experience in mentor.experiances" :key="experience.id">{{experience.position}}</span>                
+                   </div>
                 </div>
-                </router-link>
+                
             </div>
         </div>
         </div>
     </div>
+    <!-- mentor profile detail dialog -->
+    <base-modal id="profileModal">
+      <template #modalBody>
+         <button @click="profileModal.hide()" class="hideModalBtn text-white fs-4"><i class="fas fa-chevron-left"></i></button>
+            <div class="mt-3">
+                <div class="detailProfileCircle rounded-circle text-white">
+                    <img src="../assets/sayat3.jpg" alt="mentor profile" class="img-fluid">
+                </div>              
+           <div class="text-center mt-2">
+               <p class="text-white">Eden Getachew</p>
+                <p class="text-white">Data scientist,IA Engineer</p>
+                <p class="text-white">Lorem ipsum, dolor sit amet consectetur adipisicing elit. Eius culpa tempora saepe.</p>
+           </div>
+            </div>
+            <div class="d-flex justify-content-center mt-5">
+                <button @click="showExperience()" class="experience text-white px-2 px-md-5" :class="{activeBtn:isExperience}">Experience</button>
+                <button @click="showAvailability()" class="experience text-white px-2 px-md-5">Availabile Time</button>
+            </div>
+            <transition>
+            <div v-if="isExperience" class="w-100 px-3 mt-3">
+                <div v-for="n in 3" :key="n">
+                   <p class="text-white">Project Manager</p>
+                   <p class="text-white">Hybrid Design</p>
+                   <p class="text-white">From Jun 2021 to present</p>
+                   <hr class="text-white mt-2">
+            </div>
+            </div>
+            </transition>
+            <transition>
+            <div v-if="isAvailability" class="border rounded shadow-sm w-100 p-3 mt-3 bg-white">
+                   <p>I will be free in the following times</p>
+                   <p class="mt-3">SAT 4:00 am to 6:00 am local time</p>
+                   <p>SAT 8:00 pm to 10:00 am local time</p>
+                   <p>SUN 4:00 am to 6:00 am local time</p>
+                   <p>SUN 8:00 pm to 10:00 am local time</p>
+                   <p>From Jun 2021 to present</p>
+            </div>
+            </transition>
+             <div class="d-grid gap-2 pb-4">
+            <button
+              @click="sendMentorRequest()"
+              class="btn sendRequestFromDetail mt-3 text-white"
+              :disabled="isLoading"
+            >
+              <span v-if="isLoading">
+                <span
+                  class="spinner-border spinner-border-sm mx-2"
+                  role="status"
+                  aria-hidden="true"
+                ></span>
+                <span>Sending request</span>
+              </span>
+              <span v-else>Send Mentor Request</span>
+            </button>
+            <p class="text-danger text-center small">{{ notify }}</p>
+          </div>
+        </template>
+        </base-modal>
 </template>
 <script>
+import { Modal } from "bootstrap";
 import apiClient from '@/url'
 export default {
     data() {
         return {
-            mentors:[]
+            mentors:[],
+            profileModal:'',
+            isExperience:true,
+            isAvailability:false,
+            isLoading:false,
+            notify:'',
         }
     },
     created() {
-        // this.fetchMentors()
+        this.fetchMentors()
+    },
+    mounted() {
+        this.profileModal = new Modal(document.getElementById("profileModal"));
     },
     computed:{
         fields() {
@@ -71,9 +144,10 @@ export default {
        async fetchMentors(){
             this.$store.commit('setIsLoading',true)
             try{
-                var response = apiClient.get('api/mentors')
+                var response = await apiClient.get('user/mentors')
                 if(response.status === 200){
                     this.mentors = response.data
+                    console.log('mentors =',response.data)
                 }
             }
             finally{
@@ -81,8 +155,22 @@ export default {
             }
 
         },
-        sendMentorRequest(){},
-        viewMentorProfile(){}
+        async sendMentorRequest(id){
+            this.$router.push({name:'MentorRequest',params:{mentorId:id}})
+           
+        },
+        viewMentorProfile(){
+            this.notify = ''
+            this.profileModal.show()
+        },
+        showExperience(){
+            this.isAvailability = false
+            this.isExperience = true
+        },
+        showAvailability(){
+            this.isExperience = false
+            this.isAvailability = true
+        }
     },
 }
 </script>
@@ -90,9 +178,6 @@ export default {
 .wraper{
     background-color: #0f0e1c;
 }
-/* .searchContainer{
-    border-radius: 10rem;
-} */
 .searchContainer input{
     /* border-radius: 10rem; */
     border: none;
@@ -103,9 +188,7 @@ export default {
     background-color: #0f0e1c;
     color: #fff;
     border: none;
-    /* border-top-right-radius: 10rem;
-    border-bottom-right-radius: 10rem; */
-}
+    }
 select{
     background-color: #0f0e1c;
     color: #fff;
@@ -113,13 +196,17 @@ select{
 .profileCircle{
     background-color: #1d213a;
 }
-.sendRequest{
-    width: 80%;
+.profileContainer:hover{
+ cursor: pointer;
+}
+.sendRequest,.sendRequestFromDetail{
+    width: 100%;
     margin: auto;
     background-color: #e7453a;
 }
+
 .viewProfile{
-     width: 80%;
+     width: 100%;
     margin: auto;
     background-color: #002f5d;
 }
@@ -143,5 +230,56 @@ select{
 }
 .smProfileCircle{
     background-color: #e7453a;
+}
+.hideModalBtn{
+    background: none;
+    border: none;
+}
+.detailProfileCircle{
+    width: 5rem;
+    height: 5rem;
+    margin: auto;
+    background-color: #e7453a;
+    overflow: hidden;
+}
+.detailProfileCircle img{
+    width: 100%;
+    height: 100%;
+}
+.experience{
+    background: none;
+    border: none;
+    box-shadow: none!important;
+    border-bottom: 1px solid #fff;
+}
+.experience:focus,.activeBtn{
+border-bottom: 2px solid #f69f83;
+}
+.v-enter-from{
+    transform: translateX(20%);
+    opacity: 0;
+}
+.v-enter-active{
+
+  transition: all 0.3s ease-out;
+}
+.v-enter-to{
+    opacity: 1;
+}
+.v-leave-from{
+    opacity: 1;
+}
+.v-leave-active{
+    transition: all 0.3s ease-out;
+}
+.v-leave-to{
+    opacity: 0;
+    transform: translateX(-20%);
+}
+@media(max-width: 576px){
+    .sendRequestFromDetail{
+        width: 100%;
+        margin: auto;
+    }
 }
 </style>

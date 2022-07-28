@@ -2,7 +2,7 @@
   <div class="recentRoleModels pb-5">
     <div class="text-center text-white pt-5 pb-2">ALL PUBLISHED ROLE MODELS</div>
     <div class="row mx-2 mx-lg-3">
-      <div class="col-sm-6 col-md-4 col-lg-3 mt-3" v-for="n in 9" :key="n">
+      <div class="col-sm-6 col-md-4 col-lg-3 mt-3" v-for="n in 12" :key="n">
       <div class="row">
         <div class="col-6 col-sm-12 roleModeImg">
        <router-link :to="{name:'RoleModelDetail',params:{rolemodelId:1}}"> <img src="../assets/rolemodel4.jpg" alt="role model image" class="img-fluid rounded w-100" /></router-link>
@@ -41,6 +41,9 @@ created() {
 computed:{
   roleModels(){
     return this.$store.getters.roleModels
+  },
+  user(){
+    return this.$store.getters.user
   }
 },
 methods: {

@@ -11,6 +11,11 @@ export default createStore({
         roleModels: [],
         blogs: [],
         isLoading: false,
+        languages: [],
+        lang: 'en',
+        myInterests: [],
+        myMentor: {},
+
     },
     getters: {
         fields(state) {
@@ -27,7 +32,21 @@ export default createStore({
         },
         isLoading(state, isLoading) {
             state.isLoading = isLoading
+        },
+        languages(state) {
+            return state.languages
+        },
+        lang(state) {
+            return state.lang
+        },
+        myInterests(state) {
+            return state.myInterests
+        },
+        myMentor(state) {
+            return state.myMentor
         }
+
+
     },
     mutations: {
         setFields(state, fields) {
@@ -36,7 +55,7 @@ export default createStore({
         setEducationLebles(state, educationLebles) {
             state.educationLebles = educationLebles
         },
-        setRoleModels(state, roleModels) {
+        setRolemodels(state, roleModels) {
             state.roleModels = roleModels
         },
         setBlogs(state, bolgs) {
@@ -44,7 +63,20 @@ export default createStore({
         },
         setIsLoading(state, isLoading) {
             state.isLoading = isLoading
+        },
+        setLlanguages(state, languages) {
+            state.languages = languages
+        },
+        setLang(state, lang) {
+            state.lang = lang
+        },
+        setmyInterests(state, interests) {
+            state.myInterests = interests
+        },
+        setMyMentor(state, myMentor) {
+            state.myMentor = myMentor
         }
+
     },
     actions: {
         async fetchFields({ commit }) {
@@ -53,6 +85,7 @@ export default createStore({
                 var response = await apiClient.get('api/fields')
                 if (response.status === 200) {
                     commit('setFields', response.data)
+                    console.log('fields =', response.data)
                 }
             } catch (err) {
                 throw 'error'
@@ -77,7 +110,7 @@ export default createStore({
         async fetchRoleModels({ commit }) {
             commit('setIsLoading', true)
             try {
-                var response = await apiClient.get('api/role_models')
+                var response = await apiClient.get(`user/get_role_models?lang=${'en'}`)
                 if (response.status === 200) {
                     commit('setRolemodels', response.data)
                     console.log('role models=', response.data)
@@ -91,7 +124,7 @@ export default createStore({
         async fetchBlogs({ commit }) {
             commit('setIsLoading', true)
             try {
-                var response = await apiClient.get('api/blogs')
+                var response = await apiClient.get(`user/get_blogs?lang=${'en'}`)
                 if (response.status === 200) {
                     commit('setBlogs', response.data)
                     console.log('blogs =', response.data)
@@ -101,7 +134,47 @@ export default createStore({
             } finally {
                 commit('setIsLoading', false)
             }
-        }
+        },
+        async fetchLanguages({ commit }) {
+            commit('setIsLoading', true)
+            try {
+                var response = await apiClient.get(`api/languages`)
+                if (response.status === 200) {
+                    commit('setLlanguages', response.data)
+                    console.log('languages =', response.data)
+                }
+            } catch (err) {
+                throw 'error'
+            } finally {
+                commit('setIsLoading', false)
+            }
+        },
+        async fetchMyInterests({ commit }) {
+            commit('setIsLoading', true)
+            try {
+                var response = await apiClient.get(`user/my_interests`)
+                if (response.status === 200) {
+                    commit('setmyInterests', response.data)
+                    console.log('my interests =', response.data)
+                }
+            } catch (err) {
+                throw 'error'
+            } finally {
+                commit('setIsLoading', false)
+            }
+        },
+        async fetchMyMentor({ commit }) {
+            try {
+                var response = await apiClient.get(`user/my_mentor`)
+                if (response.status === 200) {
+                    commit('setMyMentor', response.data)
+                    console.log('my mentor =', response.data)
+                }
+            } catch (err) {
+                throw 'error'
+            }
+        },
+
     }
 
 })
