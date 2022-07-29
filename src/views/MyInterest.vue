@@ -61,13 +61,15 @@ export default {
   },
   watch:{
     myInterests(){
+      if(!this.selectedFields.length){
       this.colorMyInterest()
+      }
     }
   },
   methods: {
     colorMyInterest(){
-      this.selectedFields = this.myInterests
-      this.selectedFields.forEach(interest => {
+      this.myInterests.forEach(interest => {
+        this.selectedFields.push(interest.id)
         document.getElementById(interest.id).style.backgroundColor ='#002f5d'
       });
     },
@@ -78,22 +80,18 @@ export default {
       if (index === -1) {
         this.selectedFields.push(fieldId);
         document.getElementById(fieldId).style.backgroundColor = "#002f5d";
-        console.log("selected fields ==", this.selectedFields);
+        console.log("selected fields length ==", this.selectedFields?.length);
         console.log('element id =',fieldId)
       } else if (index) {
         this.selectedFields.splice(index, 1);
         document.getElementById(fieldId).style.backgroundColor = "#0f0e1c";
-        console.log("selected fields ==", this.selectedFields);
+        console.log("selected fields length ==", this.selectedFields?.length);
       }
     },
      async editInterest() {
       this.isLoading = true;
       try {
-        var selctedInterest = {
-          interests: this.selectedFields,
-        };
-
-        var response = await apiClient.post("user/set_interest",selctedInterest);
+        var response = await apiClient.post("user/set_interest",{interests:this.selectedFields});
         if (response.status === 201) {
           console.log("user created = ", response.data);
         }

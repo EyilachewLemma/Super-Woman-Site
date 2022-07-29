@@ -23,10 +23,10 @@
                   <p class="me-2 my-0">
                     <i class="fa-brands fa-google-play"></i>
                   </p>
-                  <p class="my-0">
+                  <button @click="getAppFromPlayStor()" class="my-0">
                     Get Apps On
                     <br />google Play
-                  </p>
+                  </button>
                 </div>
               </button>
               <button class="btn fromAppStorBtn text-white px-3 mt-lg-5 border">
@@ -34,10 +34,10 @@
                   <p class="me-2 my-0">
                     <i class="fa-brands fa-app-store"></i>
                   </p>
-                  <p class="my-0">
+                  <button @click="getAppFromAppStor()" class="my-0">
                     Get Apps On
                     <br />App Store
-                  </p>
+                  </button>
                 </div>
               </button>
             </div>
@@ -92,10 +92,10 @@
             <p class="me-2 my-0">
               <i class="fa-brands fa-google-play"></i>
             </p>
-            <p class="my-0">
+            <button @click="getAppFromPlayStor()" class="my-0">
               Get Apps On
               <br />google Play
-            </p>
+            </button>
           </div>
         </button>
         <button class="btn fromAppStorBtn text-white px-3 mt-lg-5 border">
@@ -103,10 +103,10 @@
             <p class="me-2 my-0">
               <i class="fa-brands fa-app-store"></i>
             </p>
-            <p class="my-0">
+            <button @click="getAppFromAppStor()" class="my-0">
               Get Apps On
               <br />App Store
-            </p>
+            </button>
           </div>
         </button>
       </div>
@@ -309,6 +309,11 @@ export default {
       this.isHover = false;
       console.log("isHover= ", this.isHover);
     },
+    getAppFromAppStor(){
+      this.$toast.success('product added to the cart')
+      console.log('get app from app store')
+    },
+    getAppFromPlayStor(){},
    
     formatDate(createdAt) {
       var date = new Date(createdAt);

@@ -1,7 +1,7 @@
 <template>
 <div class="wraper">
-    <div class="messageBox">
-    <div class="mentorProfile d-flex justify-content-start px-3 px-lg-5 py-2">
+    <div class="messageBox border">
+    <div class="mentorProfile sticky-top d-flex justify-content-start px-3 px-lg-5 py-2">
 <button  @click="$router.back()" class="text-white backBtn align-self-center me-4 fs-4"><i class="fa-solid fa-angle-left"></i></button>
  <div class="profileCircle rounded-circle text-white me-3">
   <img :src="myMentor?.profile_picture" alt="mentor profile" class="img-fluid rounded-circle">
@@ -38,7 +38,7 @@
                </div>
            </div>
         </div>
-          <div class="pt-3 messageInputContainer pb-1">
+          <div class="pt-3 messageInputContainer pb-1 px-3 fixed-bottom">
           <div class="input-group mb-3 msgInputGroup border px-3">
         <input type="text" class="form-control form-control-lg msginput" placeholder="write message" aria-label="Recipient's username" aria-describedby="button-addon2" v-model="newMessage" @keyup.enter.prevent="sendMessage()">
        <button @click="sendMessage()" class="text-primary fs-4" type="button" id="sendBtn"><i class="fas fa-paper-plane"></i></button>
@@ -58,12 +58,14 @@ export default {
         return {
             newMessage:"",
             messages:[],
+            page:10,
+            pageCounter:1,
 
         }
     },
     created() {
         this.$store.dispatch('fetchMyMentor')
-        this.listenForChanges(),
+        this.listenForChanges()
         this.featchMessages()
     },
     computed:{
@@ -71,12 +73,25 @@ export default {
             return this.$store.getters.myMentor
         }
     },
+    mounted() {
+        window.addEventListener('scroll',()=>{
+            let scrollTop = document.documentElement.scrollTop
+            let scrollHeight = document.documentElement.scrollHeight
+            let clientHeight = document.documentElement.clientHeight
+            if(scrollTop+clientHeight >= scrollHeight){
+                this.pageCounter++
+                this.page = this.page*this.pageCounter
+                this.featchMessages()
+            }
+        })
+    },
     methods: {
        async featchMessages(){
             try{
-                var response = await apiClient.get('user/messages')
+                var response = await apiClient.get(`user/messages?per_page=${this.page}`)
                 if(response.status === 200){
-                    this.messages = response.data
+                    var featchedMessages = response.data.data
+                    this.messages = featchedMessages.reverse()
                     console.log('messages=',response.data)
                 }
             }
@@ -88,10 +103,9 @@ export default {
          try{
                 var response = await apiClient.post('user/send_message',{message:this.newMessage})
                 if(response.status === 200){
-                    //  var index = (this.messages?.length -1)
-                    // this.messages[index] = response.data
-                    // console.log('msgLength=',index)
-                    this.messages = []
+                    var index = (this.messages?.length -1)
+                    this.messages[index] = response.data
+                    console.log('msgLength=',index)
                     this.newMessage = ''
                     console.log(response.data)
                     
@@ -110,7 +124,7 @@ export default {
                ) 
       pusher.subscribe('chat') 
       pusher.bind('newMessage', data => { 
-           this.messages= data.message
+           this.messages.push(data.message) 
       }) 
         },
         formatDate(createdAt){
@@ -126,6 +140,11 @@ export default {
 <style scoped>
 .wraper{
     width: 100%;
+    background-color: #0f0e1c;
+}
+.messageBox{
+    width: 100%;
+    min-height: 100vh;
     background-color: #0f0e1c;
 }
 .backBtn{
@@ -189,6 +208,7 @@ export default {
     color:#e7453a
 }
 .messageInputContainer{
+    max-width: 100%;
     background-color: #0d0d0d;
 }
 .msgInputGroup{
@@ -212,13 +232,13 @@ input:focus{
     border: none;
 }
 @media(min-width: 768px){
-    .messageBox{
+    .messageBox,.messageInputContainer{
         width: 60%;
         margin: auto;
     }
 }
 @media(min-width: 992px){
-    .messageBox{
+    .messageBox,.messageInputContainer{
         width: 50%;
         margin: auto;
     }
