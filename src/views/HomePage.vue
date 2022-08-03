@@ -3,7 +3,7 @@
     <!-- home page section -->
     <div class="position-relative">
       <img
-        src="../assets/homeBackground.png"
+        src="../assets/Background.png"
         alt="home page background image"
         class="backgrounImg img-fluid"
       />
@@ -49,12 +49,12 @@
             @mouseenter="decreaseHeight()"
             @mouseleave="increaseHeight()"
           >
-            <router-link to="#" class="leftBtn border rounded shadow-sm p-2">See More</router-link>
-            <img src="../assets/img1.jpg" alt="sample image" class="img-fluid leftImg" />
+             <router-link to="#" class="leftBtn border rounded shadow-sm p-2">See More</router-link>
+            <img src="../assets/bety2.jpg" alt="sample image" class="img-fluid leftImg" />
           </div>
           <div class="rightImageContainer" :class="{ onHover:isHover}">
             <router-link to="#" class="rightBtn border rounded shadow-sm p-2">See More</router-link>
-            <img src="../assets/img3.jpg" alt="sample image" class="img-fluid rightImg" />
+            <img src="../assets/bety.jpg" alt="sample image" class="img-fluid rightImg" />
           </div>
         </div>
       </div>
@@ -112,11 +112,12 @@
       </div>
     </div>
   </div>
+  <!-- rolemodel started -->
   <div class="recentRoleModels pb-5">
     <div class="text-center text-white py-5">RECENT PUBLISHED ROLE MODELS</div>
-    <div class="row mx-2 mx-lg-3">
+    <div class="row mx-2 rolemodelRow">
       <div
-        class="col-6 col-md-4 col-lg-3 mt-3"
+        class="col-md-6 col-lg-4 mt-3 px-4"
         v-for="roleModel in roleModels.data"
         :key="roleModel.id"
       >
@@ -125,12 +126,13 @@
             <img
               :src="roleModel.image?.path"
               alt="role model image"
-              class="img-fluid rounded w-100"
+              class="img-fluid rounded"
             />
           </router-link>
         </div>
+        <div class="mt-md-2 text-white detailContent">{{roleModel.intro}}</div>
         <div class="d-flex justify-content-between mt-1">
-          <div class="issue d-none d-md-block">ISSUE {{formatDate(roleModel.created_at)}}</div>
+          <div class="issue d-none d-md-block fw-bold">ISSUE Date {{formatDate(roleModel.created_at)}}</div>
           <div class="d-flex">
             <p class="text-white me-3">
               {{roleModel.like}}
@@ -157,6 +159,7 @@
       </button>
     </div>
   </div>
+  <!-- rolemodel end -->
   <div class="blogSection">
     <div class="recentBlogs">
       <div class="text-center text-white py-5">RECENT PUBLISHED BLOGS</div>
@@ -212,17 +215,22 @@
     </div>
     <div class="col-md-6 subscribtionInput p-4 mt-3">
       <form @submit.prevent>
-        <div class="mb-3 mt-3 mt-lg-4">
-          <input type="text" class="form-control text-white" id="fname" placeholder="First Name" />
+        <div class="mb-3 mt-3 mt-lg-4" :class="{ warning: v$.userInfo.first_name.$error }">
+          <input type="text" class="form-control text-white" id="fname" placeholder="First Name" v-model="userInfo.first_name" />
+          <span class="error-msg mt-1">
+              {{v$.userInfo.first_name.$errors[0]?.$message}}
+            </span>
         </div>
-        <div class="mb-3">
-          <input type="text" class="form-control text-white" id="lname" placeholder="Last Name" />
+        <div class="mb-3" :class="{ warning: v$.userInfo.last_name.$error }">
+          <input type="text" class="form-control text-white" id="lname" placeholder="Last Name" v-model="userInfo.last_name"/>
+          <span class="error-msg mt-1">{{v$.userInfo.last_name.$errors[0]?.$message}}</span>
         </div>
-        <div class="mb-3">
-          <input type="email" class="form-control text-white" id="email" placeholder="Email" />
+        <div class="mb-3" :class="{ warning: v$.userInfo.email.$error }">
+          <input type="email" class="form-control text-white" id="email" placeholder="Email" v-model="userInfo.email" />
+           <span class="error-msg mt-1">{{v$.userInfo.email.$errors[0]?.$message}}</span>
         </div>
         <div class="mb-4 mt-5">
-          <button class="btn sbscribeBtn text-white px-3">SUBSCRIBE</button>
+          <button @click="subscribe()" class="btn sbscribeBtn text-white px-3">SUBSCRIBE</button>
         </div>
       </form>
     </div>
@@ -242,14 +250,15 @@
       </div>
     </div>
   </div>
-  <TheFooter />
+  <!-- <TheFooter /> -->
   <!-- bottom nav for small device -->
   <BottomNav class="d-md-none" />
 </template>
 <script>
 // import BottomNav from '../components/BottomNav.vue'
 import useValidate from "@vuelidate/core";
-import { required, helpers } from "@vuelidate/validators";
+import { required, helpers,email } from "@vuelidate/validators";
+import apiClient from '@/url';
 export default {
   components: {
     // BottomNav
@@ -273,6 +282,10 @@ export default {
         },
         last_name: {
           required: helpers.withMessage("last name can not be empty", required)
+        },
+        email: {
+          required: helpers.withMessage("please enter your email", required),
+          email
         },
         
       },
@@ -321,6 +334,20 @@ export default {
       var month = date.getMonth();
       var day = date.getDate();
       return month * 1 + 1 + "/" + day + "/" + year;
+    },
+   async subscribe(){
+      this.v$.userInfo.$validate()
+      if(!this.v$.userInfo.$error){
+        try{
+          var response = await apiClient.post('api/subscribe',this.userInfo)
+           if(response.status === 200){
+            console.log('successfully subscribed')
+           }
+        }      
+      catch(err){
+        console.log('error')
+      }
+      }
     }
   }
 };
@@ -348,24 +375,25 @@ export default {
   position: relative;
 }
 .leftImg {
-  width: 53%;
+  width: 45%;
   margin-top: 11%;
   position: absolute;
-  right: 37%;
+  right: 45%;
   border-radius: 1.5rem;
   transition: all 0.6s;
 }
 .leftImgContainer:hover .leftImg {
-  /* min-height: 33rem; */
+  width: 60%;
   border-radius: 2rem;
   margin-top: 0%;
+  right: 35%;
   z-index: 1;
 }
 .rightImageContainer {
   position: relative;
 }
 .rightImg {
-  width: 53%;
+  width: 60%;
   position: absolute;
   top: 0%;
   right: 12%;
@@ -373,9 +401,10 @@ export default {
   transition: all 1s ease-out;
 }
 .onHover img {
-  max-height: 30rem;
+  /* max-height: 30rem; */
+   width: 45%;
+  margin-top: 11%;
   border-radius: 1.5rem;
-  margin-top: 18%;
   position: absolute;
   right: 9%;
   transition: all 1s ease-out;
@@ -420,6 +449,8 @@ export default {
 }
 /*  */
 .recentRoleModels {
+  margin-left: 3%;
+  margin-right: 3%;
   background-color: #0f0e1c;
 }
 .imgContainer {
@@ -428,10 +459,10 @@ export default {
 }
 .imgContainer img {
   width: 100%;
-  transition: all 1s;
+  transition: all 1.5s;
 }
 .imgContainer img:hover {
-  transform: scale(1.5);
+  transform: scale(1.2);
 }
 .issue {
   color: #f69f83;
@@ -445,15 +476,11 @@ export default {
 .recentBlogs {
   background-color: #0f0e1c;
 }
-/* .slightDark{
-   background-color: #1d213a;
-} */
 .blogSection {
   background-color: #0f0e1c;
   max-width: 100%;
 }
 .subscription {
-  /* max-width: 100%; */
   background-color: #0d0d0d;
 }
 .subscribtionInput {
@@ -504,5 +531,10 @@ select {
   display: inline;
   color: red;
 }
-
+@media(min-width: 768px){
+  .recentRoleModels{
+margin-left: 8%;
+margin-right: 8%;
+  }
+}
 </style>

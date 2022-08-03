@@ -826,7 +826,7 @@ export default {
           var response = await apiClient.post("user/verify_phone", credential);
           if (response.status === 200) {
             this.saveUserData(response);
-            this.loginConfirmModal.show();
+            this.loginConfirmModal.hide();
             var topath = this.$route.query.to || "/";
             this.$router.push(topath);
           }
@@ -956,14 +956,6 @@ background-color: gainsboro;
   top: 10%;
   background-color: rgba(0, 0, 0, 0.69);
 }
-.fieldContainer {
-  width: 70%;
-  height: 100%;
-  margin: auto;
-  background-color: #1d213a;
-  color: #fff;
-  overflow-y: auto;
-}
 input,
 select {
   background-color: #1d213a;
@@ -1072,11 +1064,6 @@ select {
   }
   .bigLogo {
     width: 20%;
-  }
-}
-@media (max-width: 768px) {
-  .fieldContainer {
-    width: 100%;
   }
 }
 </style>

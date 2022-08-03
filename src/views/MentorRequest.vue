@@ -83,6 +83,12 @@ textarea:focus{
 }
 @media(min-width: 768px){
     .wraper{
+        width: 75%;
+        margin: auto;
+    }
+}
+@media(min-width: 992px){
+    .wraper{
         width: 50%;
         margin: auto;
     }

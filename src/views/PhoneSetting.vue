@@ -156,8 +156,6 @@ export default {
     data() {
         return {
           v$:useValidate(),
-            phoneInputModal:null,
-            phoneConfirmModal:null,
              code1: "",
              code2: "",
              code3: "",
@@ -240,10 +238,11 @@ export default {
           phone_number: this.phone.number
         };
         try {
-          this.phoneInputModal.hide();
           var response = await apiClient.post("user/verify_phone", credential);
           if (response.status === 200) {
-            this.phoneInputModal.hide();
+            this.isCodeInput = false
+            this.$toast.success(`your connection is terminated succussfuly`);
+            
           }
         } finally {
           this.isLoading = false;

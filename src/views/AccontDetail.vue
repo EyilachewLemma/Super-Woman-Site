@@ -124,9 +124,9 @@
               v-model="user.bio"
             />
           </div>
-           <div class="mb-3">
+           <div class="mb-3 bbottom">
             <p class="text-white">Interested In</p>
-            <span v-for="interest in myInterests" :key="interest.id" class="text-white bbottom mt-2">{{interest.title}},</span>
+            <span v-for="interest in myInterests" :key="interest.id" class="text-white mt-2">{{interest.title}},</span>
           </div>
           <div class="d-flex">
             <button
@@ -222,13 +222,17 @@ export default {
       
       var response = await fileApiClient.post('user/change_profile_picture',formData)
       if(response.status === 200){
+        this.$toast.success(`your profile picture is changed`);
         this.imageFile = ''
         this.image = false
-        localStorage.setItem('supUser',response.data)
+        localStorage.setItem('supUser',JSON.stringify(response.data))
         this.$store.commit('setUser',response.data)
         // this.$toast.success('your profile photo is changed successfully')
 
       }
+    }
+    catch(err){
+      this.$toast.error(`Faild to change your profile picture try again`);
     }
     finally{
       this.isUploading = false
@@ -240,12 +244,13 @@ export default {
         try {
           var response = await apiClient.post("user/update_profile", this.user);
           if (response.status === 200) {
-            localStorage.setItem('supUser',response.data)
+            this.$toast.success(`your profile informatins is updated`);
+            localStorage.setItem('supUser',JSON.stringify(response.data))
             this.$store.commit('setUser',response.data)
             console.log('success')
           }
         } catch (err) {
-          console.log(err);
+          this.$toast.error(`Faild to update your profile informatin`);
         }
         finally{
           this.isLoading = false
@@ -279,6 +284,7 @@ input,select {
   box-shadow: none !important;
 }
 .bbottom{
+  min-width: 100%;
   border-bottom: 1px solid #fff;
 }
 input:focus {

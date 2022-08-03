@@ -85,6 +85,9 @@ export default {
             }
         })
     },
+    unmounted() {
+        window.removeEventListener('scroll', this.handleScroll)
+    },
     methods: {
        async featchMessages(){
             try{

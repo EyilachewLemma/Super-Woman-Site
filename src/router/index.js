@@ -31,6 +31,12 @@ const routes = [{
                     import ( /* webpackChunkName: "Mentors" */ '../views/MentorList.vue')
             },
             {
+                path: '/mentor-application',
+                name: 'MentorApplication',
+                component: () =>
+                    import ( /* webpackChunkName: "MentorApplication" */ '../views/MentorApplication.vue')
+            },
+            {
                 path: '/account',
                 name: 'Account',
                 component: () =>
@@ -111,10 +117,10 @@ const routes = [{
 
     },
     {
-        path: '/message',
-        name: 'Message',
+        path: '/chat',
+        name: 'Chat',
         component: () =>
-            import ( /* webpackChunkName: "Message" */ '../views/MessagePage.vue')
+            import ( /* webpackChunkName: "Chat" */ '../views/MessagePage.vue')
     },
 ]
 

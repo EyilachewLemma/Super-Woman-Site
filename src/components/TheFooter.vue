@@ -23,16 +23,16 @@
       </div>
       <div class="d-flex justify-content-center">
         <div class="me-3">
-          <router-link to="#" class="text-white fs-4 text-decoration-none"><i class="fab fa-facebook-square"></i></router-link>
+          <a  href="https://www.facebook.com/eyilachew.lemma.9/" class="text-white fs-4 text-decoration-none"><i class="fab fa-facebook-square"></i></a>
         </div>
         <div class="me-3">
           <router-link to="#" class="text-white fs-4 text-decoration-none"><i class="fab fa-instagram-square"></i></router-link>
         </div>
         <div class="me-3">
-          <router-link to="#" class="text-white fs-4 text-decoration-none"><i class="fab fa-twitter-square"></i></router-link>
+          <a href="https://twitter.com/eyilachew_lema"  class="text-white fs-4 text-decoration-none"><i class="fab fa-twitter-square"></i></a>
         </div>
         <div class="me-3">
-          <router-link to="#" class="text-white fs-4 text-decoration-none"><i class="fab fa-linkedin"></i></router-link>
+          <a href="https://www.linkedin.com/in/eyilachew-lemma-072485213/" class="text-white fs-4 text-decoration-none"><i class="fab fa-linkedin"></i></a>
         </div>
       </div>
     </div>

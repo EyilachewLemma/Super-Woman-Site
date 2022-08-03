@@ -3,15 +3,13 @@
         <div class="text-center text-white px-3 pt-4 px-lg-4 fw-bold">Mentors Lists</div>
         <div class="d-flex align-items-center mt-2 px-3 pt-3 px-lg-4">
             <div class="input-group mb-3 border searchContainer me-md-5">
-             <input type="text" class="form-control" placeholder="Search Mentors" aria-label="Recipient's username" aria-describedby="button-addon2">
-             <button class="searchBtn fs-4 px-2" type="button" id="searchBtn"><i class="fas fa-search"></i></button>
+             <input type="text" class="form-control form-control-lg" placeholder="Search Mentors" aria-label="Recipient's username" aria-describedby="button-addon2" v-model="searchBy" @keyup.enter.prevent="searchMentor()">
+             <button @click="searchMentor()" class="searchBtn fs-4 px-2" type="button" id="searchBtn"><i class="fas fa-search"></i></button>
              </div>
             <div class="d-none d-md-block">
-        <select class="form-select" aria-label="Default select example">
-         <option selected>All</option>
-         <option value="1">Enginers</option>
-          <option value="2">Artist</option>
-         <option value="3">Lawyers</option>
+        <select class="form-select form-select-lg" aria-label="Default select example" @change="filterMentors($event)">
+         <option selected value="all">All</option>
+         <option v-for="field in fields" :key="field.id" :value="field.id">{{field.title}}</option>
        </select>
             </div>
         </div>
@@ -19,7 +17,10 @@
          <div class="row mx-2 mx-lg-3">
            <div class="col-md-4 col-lg-3 mt-3" v-for="mentor in mentors.data" :key="mentor.id">
            <div class="border px-1 py-3">
-             <div class="d-flex justify-content-center">
+             <div v-if="mentor.profile_picture" class="detailProfileCircle rounded-circle text-white">
+                    <img :src="mentor.profile_picture" alt="mentor profile" class="img-fluid">
+                </div> 
+             <div v-else class="d-flex justify-content-center">
                 <p class="profileCircle rounded-circle text-white p-4">{{mentor.first_name.charAt(0)+mentor.last_name.charAt(0)}}</p>
                 </div>
             <div class="mt-3 px-2">
@@ -76,10 +77,10 @@
             </div>
             <transition>
             <div v-if="isExperience" class="w-100 px-3 mt-3">
-                <div v-for="n in 3" :key="n">
-                   <p class="text-white">Project Manager</p>
-                   <p class="text-white">Hybrid Design</p>
-                   <p class="text-white">From Jun 2021 to present</p>
+                <div v-for="experience in experiences" :key="experience.id">
+                   <p class="text-white">{{experience.position}}</p>
+                   <p class="text-white">{{experience.organization}}</p>
+                   <p class="text-white">From {{experience.from}} to {{experience.to}}</p>
                    <hr class="text-white mt-2">
             </div>
             </div>
@@ -87,16 +88,12 @@
             <transition>
             <div v-if="isAvailability" class="border rounded shadow-sm w-100 p-3 mt-3 bg-white">
                    <p>I will be free in the following times</p>
-                   <p class="mt-3">SAT 4:00 am to 6:00 am local time</p>
-                   <p>SAT 8:00 pm to 10:00 am local time</p>
-                   <p>SUN 4:00 am to 6:00 am local time</p>
-                   <p>SUN 8:00 pm to 10:00 am local time</p>
-                   <p>From Jun 2021 to present</p>
+                   <p class="mt-3" v-for="availability in availabilities" :key="availability.id">{{availability.day+' '+availability.from+' to '+availability.to}}</p>
             </div>
             </transition>
              <div class="d-grid gap-2 pb-4">
             <button
-              @click="sendMentorRequest()"
+              @click="sendMentorRequest(mentorId)"
               class="btn sendRequestFromDetail mt-3 text-white"
               :disabled="isLoading"
             >
@@ -122,11 +119,17 @@ export default {
     data() {
         return {
             mentors:[],
+            availabilities:[],
+            experiences:[],
+            mentorId:null,
             profileModal:'',
             isExperience:true,
             isAvailability:false,
             isLoading:false,
             notify:'',
+            searchBy:'',
+            filterBy:'',
+
         }
     },
     created() {
@@ -144,7 +147,7 @@ export default {
        async fetchMentors(){
             this.$store.commit('setIsLoading',true)
             try{
-                var response = await apiClient.get('user/mentors')
+                var response = await apiClient.get(`user/mentors?search=${this.searchBy}&filter=${this.filterBy}`)
                 if(response.status === 200){
                     this.mentors = response.data
                     console.log('mentors =',response.data)
@@ -156,11 +159,16 @@ export default {
 
         },
         async sendMentorRequest(id){
+            this.profileModal.hide()
             this.$router.push({name:'MentorRequest',params:{mentorId:id}})
+
            
         },
-        viewMentorProfile(){
+        viewMentorProfile(mentor){
             this.notify = ''
+            this.mentorId = mentor.id
+            this.availabilities = mentor.availablites
+            this.experiences = mentor.experiances
             this.profileModal.show()
         },
         showExperience(){
@@ -170,6 +178,21 @@ export default {
         showAvailability(){
             this.isExperience = false
             this.isAvailability = true
+        },
+       async searchMentor(){
+            this.fetchMentors()
+        },
+        filterMentors(event){
+            if(event.target.value === 'all'){
+                this.filterBy = ''
+                this.fetchMentors()
+            }
+            else{
+               this.filterBy = event.target.value
+               this.fetchMentors()
+            }
+          
+          
         }
     },
 }

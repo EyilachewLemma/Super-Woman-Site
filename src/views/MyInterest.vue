@@ -93,7 +93,7 @@ export default {
       try {
         var response = await apiClient.post("user/set_interest",{interests:this.selectedFields});
         if (response.status === 201) {
-          console.log("user created = ", response.data);
+          this.$toast.success(`your Interest is edited successfully`);
         }
       } finally {
         this.isLoading = false;

@@ -2,31 +2,30 @@
   <div class="recentRoleModels pb-5">
     <div class="text-center text-white pt-5 pb-2">ALL PUBLISHED ROLE MODELS</div>
     <div class="row mx-2 mx-lg-3">
-      <div class="col-sm-6 col-md-4 col-lg-3 mt-3" v-for="n in 12" :key="n">
+      <div class="col-sm-6 col-md-4 col-lg-3 mt-3" v-for="roleModel in roleModels.data" :key="roleModel.id">
       <div class="row">
         <div class="col-6 col-sm-12 roleModeImg">
-       <router-link :to="{name:'RoleModelDetail',params:{rolemodelId:1}}"> <img src="../assets/rolemodel4.jpg" alt="role model image" class="img-fluid rounded w-100" /></router-link>
+       <router-link :to="{name:'RoleModelDetail',params:{rolemodelId:roleModel.id}}">
+        <img :src="roleModel.image?.path" alt="role model image" class="img-fluid rounded w-100" /></router-link>
         </div>
         <div class="col-6 col-sm-12">
         <div class="d-flex justify-content-between mt-md-3 align-items-center">
-          <div class="issue d-none d-md-block">ISSUE 2022</div>
+          <div class="issue d-none d-md-block">ISSUE Date {{formatDate(roleModel.created_at)}}</div>
           <div class="d-flex">
-            <p @click="likeRoleModel()" class="text-white me-3">
-              1.2k
+            <p class="text-white me-3">{{roleModel.like}}
               <span class="review fs-5">
                 <i class="fas fa-thumbs-up"></i>
               </span>
             </p>
             <p class="text-white">
-              345
+              {{roleModel.comment}}
               <span class="review fs-5">
                 <i class="fas fa-comment-dots"></i>
               </span>
             </p>
           </div>
         </div>
-        <div class="mt-md-2 text-white detailContent">Lorem ipsum dolor sitsimilique possimus asperiores dolorem labore rem ipsum at ad veniam natus distinctio culpa quas.
-        </div>
+        <div class="mt-md-2 text-white detailContent">{{roleModel.intro}}</div>
         </div>
         </div>
       </div>
@@ -35,19 +34,47 @@
 </template>
 <script>
 export default {
+  data() {
+    return {
+      perPage:12,
+      pageCounter:1,
+    }
+  },
 created() {  
-  this.$store.dispatch('fetchRoleModels')
+  this.$store.dispatch('fetchRoleModels',{lang:this.$store.getters.lang,perPage:this.perPage})
 },
+ mounted() {
+        window.addEventListener('scroll',()=>{
+            let scrollTop = document.documentElement.scrollTop
+            let scrollHeight = document.documentElement.scrollHeight
+            let clientHeight = document.documentElement.clientHeight
+            if(scrollTop+clientHeight >= scrollHeight){
+                this.pageCounter++
+                this.perPage = this.perPage*this.pageCounter
+                this.$store.dispatch('fetchRoleModels',{lang:this.lang,perPage:this.perPage})
+            }
+        })
+    },
+     unmounted() {
+        window.removeEventListener('scroll', this.handleScroll)
+    },
 computed:{
   roleModels(){
     return this.$store.getters.roleModels
   },
-  user(){
-    return this.$store.getters.user
-  }
+    lang(){
+    return this.$store.getters.lang
+  },
+
 },
 methods: {
-    likeRoleModel() {}
+    formatDate(createdAt){
+     var date = new Date(createdAt)
+     var year = date.getFullYear()
+     var month = date.getMonth()
+     var day = date.getDate()
+     return month*1+1+'/'+day+'/'+year
+    },
   }
 };
 </script>

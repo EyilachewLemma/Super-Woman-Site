@@ -7,7 +7,6 @@
            <div class="text-center mt-2">
                <p class="text-white">{{myMentor.first_name+' '+myMentor.last_name}}</p>
                 <p class="text-white">Data scientist,IA Engineer</p>
-                <p class="text-white">Lorem ipsum, dolor sit amet consectetur adipisicing elit. Eius culpa tempora saepe.</p>
                 <p>number of mentees:{{myMentor.no_of_mentee}}</p>
            </div>
             <div class="d-flex justify-content-center mt-5">
@@ -15,7 +14,7 @@
                 <button @click="showAvailability()" class="experience text-white px-2 px-md-5">Availabile Time</button>
             </div>
             <transition>
-            <div v-if="isExperience" class="w-100 mt-3 experienceDiv pb-2">
+            <div v-if="isExperience" class="mt-3 experienceDiv pb-2">
                 <div v-for="experience in myMentor.experiances" :key="experience.id">
                    <p class="text-white">{{experience.position}} at {{experience.organization}}</p>
                    <p class="text-white">from {{experience.from+' to '+experience.to}}</p>
@@ -23,7 +22,7 @@
             </div>
             </transition>
             <transition>
-            <div v-if="isAvailability" class="border rounded shadow-sm w-100 p-3 mt-3 bg-white text-dark">
+            <div v-if="isAvailability" class="availability border rounded shadow-sm p-3 mt-3 bg-white text-dark">
                    <p>I will be free in the following times</p>
                    <p v-for="freeTime in myMentor.availablites" :key="freeTime.id" class="mt-3">{{freeTime.day+' '+freeTime.from+' to '+freeTime.to}}</p>
             </div>
@@ -70,13 +69,15 @@ export default {
                 if (response.status === 200) {
                     // this.myMentor = response.data
                     console.log('my mentor =', response.data)
-                    this.notify = 'your connection is terminated succussfuly'
+                    this.$toast.success(`your connection is terminated succussfuly`);
                 }
             } catch (err) {
-                throw 'error'
+            this.$toast.error();(`Faild to Disconnect try again`);
             } 
         },
-        sendMessage(){},
+        sendMessage(){
+            this.$router.push({name:'Chat'})
+        },
     },
 }
 </script>
@@ -131,9 +132,9 @@ border-bottom: 2px solid #f69f83;
     opacity: 0;
     transform: translateX(-20%);
 }
-@media(max-width: 768px){
-    .sendRequestFromDetail{
-        width: 100%;
+@media(min-width: 768px){
+    .availability,.experienceDiv{
+        width: 50%;
         margin: auto;
     }
 }

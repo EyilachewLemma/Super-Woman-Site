@@ -5,7 +5,7 @@
   <div class="col-sm-6" v-for="request in myRequest" :key="request.id">
     <div class="d-flex justify-content-between">
        <p class="text-white">Sent to {{request.mentor}} on  {{formatDate(request.created_at)}}</p>
-       <p class="fw-bold text-white">{{request.state}}</p>
+       <p class="fw-bold" :class="{open:request.state !== 'accepted',accepted:request.state === 'accepted'}">{{request.state}}</p>
     </div>
     <div class="border rounded mt-1 mb-4 px-3 py-2 text-white">{{request.request_message}}
     </div>
@@ -47,3 +47,11 @@ export default {
   },
 }
 </script>
+<style scoped>
+.accepted{
+  color: green;
+}
+.open{
+  color: red;
+}
+</style>

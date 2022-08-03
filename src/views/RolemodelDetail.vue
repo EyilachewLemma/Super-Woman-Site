@@ -8,13 +8,13 @@
   </div> -->
   <div class="carousel-inner">
     <div class="carousel-item active">
-      <img :src="images[0]?.path" class="d-block" alt="...">
+      <img :src="images[0]?.path" class="carouselImg" alt="role model image">
     </div>
     <!-- <div class="carousel-item">
-      <img src="../assets/rolemodel2.jpg" class="d-block" alt="...">
+      <img src="../assets/rolemodel2.jpg" class="carouselImg" alt="...">
     </div>
     <div class="carousel-item">
-      <img src="../assets/rolemodel3.jpg" class="d-block" alt="...">
+      <img src="../assets/rolemodel3.jpg" class="carouselImg" alt="...">
     </div> -->
   </div>
   <button class="carousel-control-prev text-white" type="button" data-bs-target="#rolemodelImage" data-bs-slide="prev">
@@ -28,26 +28,35 @@
 </div>
 <!-- end of carousel section -->
 <div class="d-flex mt-4 py-2">
-   <div class="fs-5 fw-bold text-white">{{roleModelDetails.title}}</div>
-   <div class="ms-5 text-white d-none d-md-block">
+   <div class="fs-5 fw-bold text-white w-50">{{roleModelDetails.title}}</div>
+   <div class="ms-5 text-white d-none d-md-block fw-bold">
     <span>Issue Date:</span>
-    <span>{{formatDate()}} 7/17/2022</span>
+    <span>{{formatDate(roleModelDetails.created_at)}}</span>
    </div>
-   <div class="d-flex ms-auto">
-    <span class="fs-5 text-white"><i class="fas fa-thumbs-up"></i></span>
-    <button @click="likeRoleModel()" class="likeBtn fs-5 text-white"><i class="fas fa-thumbs-up"></i></button>
-     <button @click="commentRoleModel()" class="commentBtn ms-4 fs-5 text-white"><i class="fas fa-comment-dots"></i></button>
+   <div class="d-flex ms-auto align-items-center fs-5">
+    <span class="text-white me-2">{{roleModelDetails.like}}</span>
+     <span v-if="roleModelDetails.is_liked === 1" class="fs-4 text-primary"><i class="fas fa-thumbs-up"></i></span>
+    
+    <button v-else @click="likeRoleModel()" class="likeBtn fs-4 text-white"><i class="fas fa-thumbs-up"></i></button>
+    <a href="#giveComment" class="ms-4 fs-5 text-white">{{roleModelDetails?.comment}}<i class="fas fa-comment-dots ms-2"></i></a>
    </div>
 </div>
 <div class="d-flex py-3">
-    <button @click="listenAudio()" class="btn listenAudio text-white py-0 me-5"><span class="me-1"><i class="fas fa-play"></i></span> Listen Audio</button>
-    <button class="rounded-circle px-1 downloadBtn fw-bold"><i class="fas fa-download"></i></button>
+    <!-- <button @click="listenAudio()" class="btn listenAudio text-white py-0 me-5"><span class="me-1"><i class="fas fa-play"></i></span> Listen Audio</button>
+    <button class="rounded-circle px-1 downloadBtn fw-bold"><i class="fas fa-download"></i></button> -->
+    <audio controls v-if="roleModelDetails.audio_path">
+  <source :src="roleModelDetails.audio_path" type="audio/ogg">
+  <source src="horse.mp3" type="audio/mpeg">
+Your browser does not support the audio element.
+</audio>
 </div>
 <p class="content text-white mt-3">{{roleModelDetails.intro}}</p>
-<p class="content text-white mt-3">{{roleModelDetails.content}}</p>
+<div class="content text-white fs-5 mt-3" v-html="roleModelDetails.content"></div>
 <div class="mt-3 d-flex">
-  <button class="text-white fs-4 me-3"><i class="fas fa-thumbs-up"></i></button>
-  <button class="text-white fs-4"><i class="fas fa-comment"></i></button>
+   <span class="text-white me-2">{{roleModelDetails.like}}</span>
+   <span v-if="roleModelDetails.is_liked === 1" class="fs-4 text-primary"><i class="fas fa-thumbs-up"></i></span>
+    <button v-else @click="likeRoleModel()" class="likeBtn fs-4 text-white"><i class="fas fa-thumbs-up"></i></button>
+   <a href="#giveComment" class="ms-4 fs-5 text-white">{{roleModelDetails?.comment}}<i class="fas fa-comment-dots ms-2"></i></a>
   <div class="d-flex ms-auto">
      <button class="text-white fs-4 me-3"><i class="fab fa-facebook-square"></i></button>
   <button class="text-white fs-4 me-3"><i class="fab fa-instagram-square"></i></button>
@@ -58,37 +67,38 @@
 </div>
 </div>
 <div class="borderBottom"></div>
-<div class="comentSection px-3 py-3 px-lg-5 py-lg-5">
+<div class="comentSection ms-3 ms-lg-5 py-3 py-lg-5">
   <div class="row pt-3"> 
     <div class="col-md-7 me-lg-5">
-      <p class="text-white fw-bold">Comments(6)</p>
+      <p class="text-white fw-bold">Comments({{comments?.length}})</p>
       <div class="d-flex mt-3 mt-3">
         <p class="align-self-center text-white fs-3 me-2"><i class="fas fa-user"></i></p>
      <div class="w-100" :class="{warning:v$.comment.$error}">
-      <input @keyup.enter="sendComment()" class="form-control form-control-lg border comentInput" type="text" placeholder="write your comment here" aria-label=".form-control-lg example" v-model="comment">
+      <input @keyup.enter.prevent="sendComment()" id="giveComment" class="form-control form-control-lg border comentInput" type="text" placeholder="write your comment here" aria-label=".form-control-lg example" v-model="comment">
      <span class="error-msg mt-1">{{v$.comment.$errors[0]?.$message}}
             </span>
      </div>
       </div>
       <div class="mt-2 text-white">
-          <div class="d-flex mt-3" v-for="n in 10" :key="n">
+          <div class="d-flex mt-3" v-for="roleModelComent in comments" :key="roleModelComent.id">
           <div  class="profileCircle rounded-circle text-white me-3">
-           <img src="../assets/sayat3.jpg" alt="mentor profile" class="img-fluid rounded-circle">
+            <img v-if="roleModelComent.profile_image" :src="roleModelComent.profile_image" alt="mentor profile" class="img-fluid rounded-circle">
+            <p v-else class="rounded-circle fs-3"><i class="fas fa-user"></i></p>
            </div> 
           <!-- <p class="align-self-center smProfileCircle rounded-circle text-white p-4 me-3">AK</p> -->
-           <div class="text-white">Lorem ipsum dolor sit, amet consectetur adipisicing elit. Deserunt, exercitationem odio. Cumque excepturi explicabo illo.</div>
+           <div class="text-white">{{roleModelComent.content}}</div>
            </div>
       </div>
       </div>
       <div class="col-md-4 d-none d-md-block">
         <p class="text-white">Related Role Models</p>
-        <div v-for="n in 5" :key="n" class="mt-2">
-        <div class="row">
-          <div class="col-6">
-             <img src="../assets/rolemodel1.jpg" alt="related role model" class="img-fluid relatedRoleModels" /> 
+        <div v-for="relatedRoleModel in relatedRoleModels" :key="relatedRoleModel.id" class="mt-4">
+        <div @click="fetchRelatedRoleModelDetail(relatedRoleModel.id)" class="row relatedRoleModel">
+          <div class="col-md-4 col-lg-3">
+             <img :src="relatedRoleModel.image.path" alt="related role model" class="img-fluid relatedRoleModels" /> 
           </div>
-          <div class="col-6">
-            <p class="text-white">Lorem ipsum dolor sit amet consectetur, adipisicing elit. Doloremque, deleniti.</p>
+          <div class="col-md-8 col-lg-9">
+            <p class="text-white">{{relatedRoleModel.intro}}</p>
           </div>
         </div>                
         </div>
@@ -107,7 +117,9 @@ export default {
       v$:useValidate(),
       comment:'',
       roleModelDetails:{},
+      relatedRoleModels:[],
       images:[],
+      comments:[]
     }
   },
   validations() {
@@ -118,16 +130,33 @@ export default {
     }
     },
     created() {
-      this.fetchRoleModelDetail()
+      this.fetchRoleModelDetail(this.$route.params.rolemodelId,this.$store.getters.lang || 'en')
+      this.fetchRelatedRoleModels(this.$store.getters.lang || 'en')
+    },
+    computed:{
+      lang(){
+      return this.$store.getters.lang
+    },
+     user(){
+      return this.$store.getters.user
+    }
+    },
+    watch:{
+      lang(value){
+        this.fetchRoleModelDetail(this.$route.params.rolemodelId,value)
+        this.fetchRelatedRoleModels(value)
+      },
+
     },
   methods: {
-   async fetchRoleModelDetail(){
+   async fetchRoleModelDetail(id,value){
       this.$store.commit('setIsLoading',true)
       try{
-        var response = await apiClient.get(`user/get_detail_role_models/${this.$route.params.rolemodelId}?lang=${this.$store.getters.lang || 'en'}`)
+        var response = await apiClient.get(`user/get_detail_role_models/${id}?lang=${value || 'en'}&isLegal=${this.user?this.user?.id:0}`)
         if(response.status === 200){
            this.roleModelDetails = response.data
            this.images = response.data.image
+           this.comments = response.data.comments
            console.log('roleModel Details=',response.data)
         }
       }
@@ -135,18 +164,33 @@ export default {
         this.$store.commit('setIsLoading',false)
       }
     },
-    async sendComment(){
-      this.v$.comment.$validate()
-      if(!this.v$.comment.$error){
-          try{
-        var response = await apiClient.post(`api/role_model_comment/${this.roleModelId}`,this.comment)
+      async fetchRelatedRoleModels(value){
+      this.$store.commit('setIsLoading',true)
+      try{
+        var response = await apiClient.get(`user/get_related_role_models/${this.$route.params.rolemodelId}?lang=${value || 'en'}`)
         if(response.status === 200){
-           this.roleModelDetails = response.data
+           this.relatedRoleModels = response.data
+           console.log('related roleModels =',response.data)
         }
       }
       finally{
         this.$store.commit('setIsLoading',false)
       }
+    },
+    fetchRelatedRoleModelDetail(id){
+      this.$router.push({name:'RoleModelDetail',params:{rolemodelId:id}})
+      this.fetchRoleModelDetail(id,this.lang)
+      this.fetchRelatedRoleModels(this.lang)
+    },
+    async sendComment(){
+      this.v$.comment.$validate()
+      if(!this.v$.comment.$error){
+        var response = await apiClient.post(`user/add_comment/${this.$route.params.rolemodelId}`,{comment:this.comment})
+        if(response.status === 200){
+           this.comments.push(response.data)
+           this.roleModelDetails.comment+=1
+        }
+      
       }
     },
     async listenAudio(){
@@ -161,8 +205,14 @@ export default {
      var day = date.getDate()
      return month*1+1+'/'+day+'/'+year
     },
-    commentRoleModel(){},
-    likeRoleModel(){},
+    async likeRoleModel(){
+       var response = await apiClient.post(`user/add_like/${this.$route.params.rolemodelId}`)
+        if(response.status === 200){
+           this.roleModelDetails.is_liked = 1
+            this.roleModelDetails.like = this.roleModelDetails.like*1+ 1
+          console.log(response.data)
+        }
+    },
 
   },
 }
@@ -171,10 +221,10 @@ export default {
 .wraper,.comentSection{
     background-color: #0f0e1c;
 }
-img{
+.carouselImg{
     min-width: 100%;
     max-width:100%;
-    height: 60vh;
+    height: 70vh;
 }
 .listenAudio{
     background-color: #e7453a;
@@ -214,15 +264,18 @@ img{
   background: none;
   border: none;
 }
-.relatedRoleModels{
+/* .relatedRoleModels{
   width: 20vw;
   height: 20vh;
-} 
+}  */
 .warning input {
   border: 1px red solid;
 }
 .warning span {
   display: inline;
   color: red;
+}
+.relatedRoleModel{
+  cursor: pointer;
 }
 </style>
