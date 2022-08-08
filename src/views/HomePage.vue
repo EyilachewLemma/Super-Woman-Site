@@ -62,18 +62,18 @@
   </div>
   <!-- background for small device -->
   <div class="bgForSmallDevice d-md-none">
-    <div>
+    <div class="text-center">
       <div
         class="leftImgContainer smallScreen pt-3 pt-sm-5"
         @mouseenter="decreaseHeight()"
         @mouseleave="increaseHeight()"
       >
         <router-link to="#" class="leftBtn border rounded shadow-sm p-2">See More</router-link>
-        <img src="../assets/img1.jpg" alt="sample image" class="img-fluid leftImg" />
+        <img src="../assets/bety2.jpg" alt="sample image" class="img-fluid leftImg" />
       </div>
       <div class="rightImageContainer smallScreen" :class="{ onHover:isHover}">
         <router-link to="#" class="rightBtn border rounded shadow-sm p-2">See More</router-link>
-        <img src="../assets/img3.jpg" alt="sample image" class="img-fluid rightImg" />
+        <img src="../assets/bety.jpg" alt="sample image" class="img-fluid rightImg" />
       </div>
     </div>
   </div>
@@ -207,8 +207,8 @@
   </div>
   <div class="subscription d-md-flex px-3 py-4 p-lg-5 w-100">
     <div class="col-md-6 pt-5">
-      <div class="fs-4 fw-bold issue mt-4">SUBSCRIBE</div>
-      <div class="text-white mt-3">
+      <div class="fs-2 fw-bold issue mt-4">SUBSCRIBE</div>
+      <div class="text-white mt-3 fs-4 fw-bold">
         Subscribe to get our new articls and role model in
         <br />your inbox
       </div>
@@ -339,9 +339,12 @@ export default {
       this.v$.userInfo.$validate()
       if(!this.v$.userInfo.$error){
         try{
-          var response = await apiClient.post('api/subscribe',this.userInfo)
+          var response = await apiClient.post('user/subscribe',this.userInfo)
            if(response.status === 200){
-            console.log('successfully subscribed')
+            this.$toast.success(`thank you! we will inform updated information`);
+           }
+           if(response.status === 201){
+            this.$toast.success(`already subscribed !`);
            }
         }      
       catch(err){
@@ -401,9 +404,8 @@ export default {
   transition: all 1s ease-out;
 }
 .onHover img {
-  /* max-height: 30rem; */
    width: 45%;
-  margin-top: 11%;
+  margin-top: 5%;
   border-radius: 1.5rem;
   position: absolute;
   right: 9%;
@@ -432,10 +434,46 @@ export default {
   z-index: 10;
 }
 @media (max-width: 768px) {
-  .rightImg,
   .leftImg {
+    margin-top: 5%;
+    width: 30%;
+    right: 30%;
+  }
+  .rightImg{
     width: 30%;
   }
+  .leftImgContainer:hover .leftImg {
+  width: 40%;
+  border-radius: 2rem;
+  margin-top: 0%;
+  right: 30%;
+  z-index: 1;
+}
+.leftImgContainer:hover .leftBtn {
+  display: inline;
+  position: absolute;
+  left: 35%;
+  text-decoration: none;
+  color: #fff;
+  z-index: 10;
+}
+.rightImageContainer:hover .rightBtn {
+  display: inline;
+  position: absolute;
+  top: 5%;
+  right: 18%;
+  text-decoration: none;
+  color: #fff;
+  z-index: 10;
+}
+.onHover img {
+   width: 60%;
+  margin-top: 5%;
+  border-radius: 1.5rem;
+  position: absolute;
+  right: 9%;
+  transition: all 1s ease-out;
+}
 }
 /* fore small device */
 .bgForSmallDevice {

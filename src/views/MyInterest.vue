@@ -4,7 +4,6 @@
          <i class="fa-solid fa-angle-left"></i>
         </button>      
       <p class="text-center text-white mt-3">Choose your interests and get the best Mentore recommendation.</p>
-      <p class="text-center text-white">Don't Worry you can change it later</p>
      <div class="d-flex">
        <div class="flex-fill">
           <div class="row">
@@ -46,6 +45,9 @@ export default {
       isLoading:false,
       notify:''
     }
+  },
+  created() {
+    this.$store.dispatch("fetchMyInterests");
   },
   mounted() {    
    this.colorMyInterest()
@@ -92,7 +94,7 @@ export default {
       this.isLoading = true;
       try {
         var response = await apiClient.post("user/set_interest",{interests:this.selectedFields});
-        if (response.status === 201) {
+        if (response.status === 200) {
           this.$toast.success(`your Interest is edited successfully`);
         }
       } finally {

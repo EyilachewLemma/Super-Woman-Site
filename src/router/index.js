@@ -110,6 +110,18 @@ const routes = [{
                 component: () =>
                     import ( /* webpackChunkName: "MentorRequest" */ '../views/MentorRequest.vue')
             },
+            {
+                path: '/request-setting',
+                name: 'RequestSetting',
+                component: () =>
+                    import ( /* webpackChunkName: "RequestSetting" */ '../views/MyRequest.vue')
+            },
+            {
+                path: '/mentor-application',
+                name: 'MentorApplication',
+                component: () =>
+                    import ( /* webpackChunkName: "MentorApplication" */ '../views/MentorApplication.vue')
+            },
 
 
 
@@ -121,6 +133,18 @@ const routes = [{
         name: 'Chat',
         component: () =>
             import ( /* webpackChunkName: "Chat" */ '../views/MessagePage.vue')
+    },
+    {
+        path: '/sign-up',
+        name: 'SignUp',
+        component: () =>
+            import ( /* webpackChunkName: "SignUp" */ '../views/SignupPage.vue')
+    },
+    {
+        path: '/login',
+        name: 'Login',
+        component: () =>
+            import ( /* webpackChunkName: "Login" */ '../views/LoginPage.vue')
     },
 ]
 

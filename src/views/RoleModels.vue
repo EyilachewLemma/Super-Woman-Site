@@ -2,7 +2,7 @@
   <div class="recentRoleModels pb-5">
     <div class="text-center text-white pt-5 pb-2">ALL PUBLISHED ROLE MODELS</div>
     <div class="row mx-2 mx-lg-3">
-      <div class="col-sm-6 col-md-4 col-lg-3 mt-3" v-for="roleModel in roleModels.data" :key="roleModel.id">
+      <div class="col-sm-6 col-md-4 col-lg-3 mt-4" v-for="roleModel in roleModels.data" :key="roleModel.id">
       <div class="row">
         <div class="col-6 col-sm-12 roleModeImg">
        <router-link :to="{name:'RoleModelDetail',params:{rolemodelId:roleModel.id}}">

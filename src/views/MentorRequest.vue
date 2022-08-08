@@ -35,7 +35,8 @@ export default {
         return {
             message:'',
             isLoading:false,
-            isSuccess:true
+            isSuccess:true,
+            notify:''
         }
     },
     methods: {

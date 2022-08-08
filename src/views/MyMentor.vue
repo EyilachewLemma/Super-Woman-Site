@@ -2,11 +2,11 @@
 <div class="px-3 pt-3">
     <button  @click="$router.back()" class="d-md-none backBnt text-white"><i class="fa-solid fa-angle-left"></i></button>
                 <div class="detailProfileCircle rounded-circle text-white">
-                    <img :src="myMentor?.profile_picture" alt="mentor profile" class="img-fluid">
+                    <img v-if="myMentor?.profile_picture" :src="myMentor?.profile_picture" alt="mentor profile" class="img-fluid">
+                     <p v-else class="text-white">{{myMentor.first_name?.charAt(0)+' '+myMentor.last_name?.charAt(0)}}</p>
                 </div>              
-           <div class="text-center mt-2">
-               <p class="text-white">{{myMentor.first_name+' '+myMentor.last_name}}</p>
-                <p class="text-white">Data scientist,IA Engineer</p>
+           <div class="text-center mt-2 text-white">
+             <p>{{myMentor.first_name+' '+myMentor.last_name}}</p>
                 <p>number of mentees:{{myMentor.no_of_mentee}}</p>
            </div>
             <div class="d-flex justify-content-center mt-5">
@@ -132,10 +132,10 @@ border-bottom: 2px solid #f69f83;
     opacity: 0;
     transform: translateX(-20%);
 }
-@media(min-width: 768px){
+/* @media(min-width: 768px){
     .availability,.experienceDiv{
         width: 50%;
         margin: auto;
     }
-}
+} */
 </style>

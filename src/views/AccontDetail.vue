@@ -11,17 +11,18 @@
         <div class="position-relative">
           <div class="detailProfileCircle rounded-circle mt-4">
         <img
-          v-if="!image"
+          v-if="!image && user.profile_picture"
           :src="user?.profile_picture"
           alt="admin profile picture"
           class="img-fluid radius-circled"
         />
         <img
-          v-else
+          v-else-if="image"
           id="profile_img"
           alt="admin profile picture"
           class="img-fluid radius-circled"
         />
+        <p v-else class="text-white text-center pt-4 fw-bold fs-5 rounded-circle nameAcronym text-uppercase">{{user.first_name.charAt(0)+ user.last_name.charAt(0)}}</p>
       </div>
        <input
           type="file"
@@ -55,7 +56,7 @@
             <p class="text-danger text-center small">{{ notify }}</p>
           </div>
         <!-- <button class="btn mt-3 py-1 px-3">SAve</button> -->
-          <div class="mb-3 mt-3" :class="{ warning: v$.user.first_name.$error }">
+          <div class="mb-3 mt-4" :class="{ warning: v$.user.first_name.$error }">
             <label for="fname" class="form-label text-white">First Name</label>
             <input class="form-control form-control-sm" type="text" id="fname" aria-label="default input example" v-model="user.first_name" />
              <span class="error-msg mt-1">
@@ -267,6 +268,10 @@ export default {
 }
 .detailProfileCircle img {
   width: 100%;
+  height: 100%;
+}
+.nameAcronym{
+  background-color: #e7453a;
   height: 100%;
 }
 .cameraIcon{

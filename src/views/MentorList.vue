@@ -2,11 +2,11 @@
     <div class="wraper pb-5">
         <div class="text-center text-white px-3 pt-4 px-lg-4 fw-bold">Mentors Lists</div>
         <div class="d-flex align-items-center mt-2 px-3 pt-3 px-lg-4">
-            <div class="input-group mb-3 border searchContainer me-md-5">
-             <input type="text" class="form-control form-control-lg" placeholder="Search Mentors" aria-label="Recipient's username" aria-describedby="button-addon2" v-model="searchBy" @keyup.enter.prevent="searchMentor()">
+            <!-- <div class="input-group mb-3 border searchContainer me-md-5">
+             <input type="text" class="form-control form-control-lg searchInput" placeholder="Search Mentors" aria-label="Recipient's username" aria-describedby="button-addon2" v-model="searchBy" @keyup.enter.prevent="searchMentor()">
              <button @click="searchMentor()" class="searchBtn fs-4 px-2" type="button" id="searchBtn"><i class="fas fa-search"></i></button>
-             </div>
-            <div class="d-none d-md-block">
+             </div> -->
+            <div class="d-none d-md-block ms-auto">
         <select class="form-select form-select-lg" aria-label="Default select example" @change="filterMentors($event)">
          <option selected value="all">All</option>
          <option v-for="field in fields" :key="field.id" :value="field.id">{{field.title}}</option>
@@ -211,6 +211,9 @@ export default {
     background-color: #0f0e1c;
     color: #fff;
     border: none;
+    }
+    .searchContainer{
+        z-index: 0;
     }
 select{
     background-color: #0f0e1c;

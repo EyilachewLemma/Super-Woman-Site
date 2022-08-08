@@ -37,14 +37,20 @@
       </div>
     </div>
     <p class="thin"></p>
-    <div class="text-center">
+    <div class="text-center mt-2">
       <p class="text-white small">Designed and Developed by Merahi Technologies</p>
-      <p class="text-white small">@2022- Merahi Technologies</p>
+      <p class="text-white small">@{{ getYear()}}- Merahi Technologies</p>
     </div>
   </div>
 </template>
 <script>
-export default {};
+export default {
+  methods: {
+    getYear(){
+      return new Date().getFullYear()
+    }
+  },
+};
 </script>
 <style scoped>
 .footerContainer {

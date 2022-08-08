@@ -26,7 +26,7 @@
       </div>
 
       <div class="d-flex align-items-center mt-2">
-        <router-link to="#" class="text-white text-decoration-none">Become a Mentor</router-link>
+        <router-link :to="{name:'MentorApplication'}" class="text-white text-decoration-none">Become a Mentor</router-link>
 
         <div class="dropdown ms-4">
           <button
@@ -116,8 +116,8 @@
     </div>
   </nav>
   <!-- sign up code -->
-  <div class="signUp">
-    <base-modal id="userInfoModal">
+  <!-- <div class="signUp"> -->
+    <!-- <base-modal id="userInfoModal">
       <template #modalBody>
         <div class="px-2 py-3 px-lg-5">
           <div class="d-flex">
@@ -219,9 +219,9 @@
           </div>
         </div>
       </template>
-    </base-modal>
+    </base-modal> -->
     <!-- phone number confirmation modal-->
-    <base-modal id="confirmModal">
+    <!-- <base-modal id="confirmModal">
       <template #modalBody>
         <div class="px-2 py-3 px-lg-4">
           <div class="d-flex">
@@ -326,9 +326,9 @@
         </div>
       </template>
     </base-modal>
-  </div>
+  </div> -->
   <!-- interest selection modal -->
-  <base-modal id="fieldModal">
+  <!-- <base-modal id="fieldModal">
     <template #modalBody>
       <div class="d-flex">
         <button @click="fieldModal.hide()" class="text-white fw-bold fs-5 backBtn">
@@ -368,7 +368,7 @@
         <p class="text-danger text-center small">{{ notify }}</p>
       </div>
     </template>
-  </base-modal>
+  </base-modal> -->
   <!-- sign up end -->
   <!-- signin modale -->
   <div class="signIn">
@@ -547,7 +547,7 @@
 <script>
 import useValidate from "@vuelidate/core";
 import { required, helpers } from "@vuelidate/validators";
-import { Modal } from "bootstrap";
+// import { Modal } from "bootstrap";
 import apiClient from "../url/index";
 import fileApiClient from "../url/fileApi";
 import Vue3PhoneInput from "vue3-phone-input";
@@ -615,11 +615,11 @@ export default {
     this.$store.dispatch("fetchEducationLebles");
   },
   mounted() {
-    this.userInfoModal = new Modal(document.getElementById("userInfoModal"));
-    this.confirmModal = new Modal(document.getElementById("confirmModal"));
-    this.logIninfoModal = new Modal(document.getElementById("logIninfoModal"));
-    this.loginConfirmModal = new Modal(document.getElementById("loginConfirmModal"));
-    this.fieldModal = new Modal(document.getElementById("fieldModal"));
+    // this.userInfoModal = new Modal(document.getElementById("userInfoModal"));
+    // this.confirmModal = new Modal(document.getElementById("confirmModal"));
+    // this.logIninfoModal = new Modal(document.getElementById("logIninfoModal"));
+    // this.loginConfirmModal = new Modal(document.getElementById("loginConfirmModal"));
+    // this.fieldModal = new Modal(document.getElementById("fieldModal"));
   },
   computed: {
     educationLebles() {
@@ -642,7 +642,7 @@ export default {
   },
   methods: {
     gotoSignup() {
-      this.userInfoModal.show();
+      this.$router.push({name:'SignUp'})
     },
     async registerUser() {
       this.isLoading = true;
@@ -751,10 +751,11 @@ export default {
     },
     // sign in
     gotoLogin() {
-      this.userInfoModal.hide();
-      this.confirmModal.hide();
-      this.fieldModal.hide();
-      this.logIninfoModal.show();
+      this.$router.push({name:'Login'})
+      // this.userInfoModal.hide();
+      // this.confirmModal.hide();
+      // this.fieldModal.hide();
+      // this.logIninfoModal.show();
     },
     async login() {
       this.isLoading = true;
@@ -948,33 +949,10 @@ background-color: gainsboro;
   top: 10%;
   text-align: left;
 }
-.fieldSelectionModal {
-  min-width: 100%;
-  max-width: 100%;
-  min-height: 100vh;
-  position: absolute;
-  top: 10%;
-  background-color: rgba(0, 0, 0, 0.69);
-}
 input,
 select {
   background-color: #1d213a;
   color: #fff;
-}
-.phoneInput {
-  background: none;
-  background-color: #1d213a;
-  color: #fff;
-}
-.btn-save {
-  background-color: #eb9713;
-  border-radius: 0;
-}
-.btn-save:hover {
-  background-color: #f4480a;
-}
-.btn-cancel {
-  border-radius: 0;
 }
 .backBtn {
   background: none;

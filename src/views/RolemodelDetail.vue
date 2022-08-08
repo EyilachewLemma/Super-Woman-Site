@@ -1,21 +1,13 @@
 <template>
 <div class="wraper px-3 pt-3 px-lg-5 pt-lg-5">
     <div id="rolemodelImage" class="carousel slide" data-bs-ride="carousel">
-  <!-- <div class="carousel-indicators">
-    <button type="button" data-bs-target="#rolemodelImage" data-bs-slide-to="0" class="active" aria-current="true" aria-label="Slide 1"></button>
-    <button type="button" data-bs-target="#rolemodelImage" data-bs-slide-to="1" aria-label="Slide 2"></button>
-    <button type="button" data-bs-target="#rolemodelImage" data-bs-slide-to="2" aria-label="Slide 3"></button>
-  </div> -->
   <div class="carousel-inner">
     <div class="carousel-item active">
       <img :src="images[0]?.path" class="carouselImg" alt="role model image">
     </div>
-    <!-- <div class="carousel-item">
-      <img src="../assets/rolemodel2.jpg" class="carouselImg" alt="...">
+    <div class="carousel-item" v-for="image in images.slice(1)" :key="image.id">
+      <img :src="image?.path" class="carouselImg" alt="role model image">
     </div>
-    <div class="carousel-item">
-      <img src="../assets/rolemodel3.jpg" class="carouselImg" alt="...">
-    </div> -->
   </div>
   <button class="carousel-control-prev text-white" type="button" data-bs-target="#rolemodelImage" data-bs-slide="prev">
     <span class="carousel-control-prev-icon" aria-hidden="true"></span>
@@ -27,20 +19,20 @@
   </button>
 </div>
 <!-- end of carousel section -->
-<div class="d-flex mt-4 py-2">
-   <div class="fs-5 fw-bold text-white w-50">{{roleModelDetails.title}}</div>
-   <div class="ms-5 text-white d-none d-md-block fw-bold">
+<div class="mt-4 py-2">
+   <div class="fs-5 fw-bold text-white">{{roleModelDetails.title}}</div>
+   </div>
+   <div class="d-flex align-items-center">
+    <div class="text-white fw-bold">
     <span>Issue Date:</span>
     <span>{{formatDate(roleModelDetails.created_at)}}</span>
    </div>
-   <div class="d-flex ms-auto align-items-center fs-5">
-    <span class="text-white me-2">{{roleModelDetails.like}}</span>
-     <span v-if="roleModelDetails.is_liked === 1" class="fs-4 text-primary"><i class="fas fa-thumbs-up"></i></span>
+    <p class="text-white me-2 ms-auto">{{roleModelDetails.like}}</p>
+     <p v-if="roleModelDetails.is_liked === 1" class="fs-4 text-primary"><i class="fas fa-thumbs-up"></i></p>
     
     <button v-else @click="likeRoleModel()" class="likeBtn fs-4 text-white"><i class="fas fa-thumbs-up"></i></button>
     <a href="#giveComment" class="ms-4 fs-5 text-white">{{roleModelDetails?.comment}}<i class="fas fa-comment-dots ms-2"></i></a>
    </div>
-</div>
 <div class="d-flex py-3">
     <!-- <button @click="listenAudio()" class="btn listenAudio text-white py-0 me-5"><span class="me-1"><i class="fas fa-play"></i></span> Listen Audio</button>
     <button class="rounded-circle px-1 downloadBtn fw-bold"><i class="fas fa-download"></i></button> -->
@@ -83,9 +75,8 @@ Your browser does not support the audio element.
           <div class="d-flex mt-3" v-for="roleModelComent in comments" :key="roleModelComent.id">
           <div  class="profileCircle rounded-circle text-white me-3">
             <img v-if="roleModelComent.profile_image" :src="roleModelComent.profile_image" alt="mentor profile" class="img-fluid rounded-circle">
-            <p v-else class="rounded-circle fs-3"><i class="fas fa-user"></i></p>
+            <p v-else class="rounded-circle fs-3 px-3 text-center"><i class="fas fa-user"></i></p>
            </div> 
-          <!-- <p class="align-self-center smProfileCircle rounded-circle text-white p-4 me-3">AK</p> -->
            <div class="text-white">{{roleModelComent.content}}</div>
            </div>
       </div>
@@ -183,6 +174,7 @@ export default {
       this.fetchRelatedRoleModels(this.lang)
     },
     async sendComment(){
+      if(this.user){
       this.v$.comment.$validate()
       if(!this.v$.comment.$error){
         var response = await apiClient.post(`user/add_comment/${this.$route.params.rolemodelId}`,{comment:this.comment})
@@ -192,11 +184,12 @@ export default {
         }
       
       }
+      }
+      else{
+        this.$router.push({name:'SignUp'})
+      }
     },
     async listenAudio(){
-  //     let sound = await import('../../recordings/sound.mp4');
-  // const audio = new Audio(sound);
-  // audio.play();
     },
      formatDate(createdAt){
      var date = new Date(createdAt)
@@ -206,12 +199,17 @@ export default {
      return month*1+1+'/'+day+'/'+year
     },
     async likeRoleModel(){
+      if(this.user){
        var response = await apiClient.post(`user/add_like/${this.$route.params.rolemodelId}`)
         if(response.status === 200){
            this.roleModelDetails.is_liked = 1
             this.roleModelDetails.like = this.roleModelDetails.like*1+ 1
           console.log(response.data)
         }
+      }
+      else{
+        this.$router.push({name:'SignUp'})
+      }
     },
 
   },

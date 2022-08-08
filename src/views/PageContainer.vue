@@ -26,7 +26,7 @@ export default {
      this.$store.dispatch("fetchEducationLebles");
     this.$store.dispatch("fetchRoleModels",{lang:selectedLang ||'en',perPage:12});
     this.$store.dispatch("fetchBlogs",{lang:selectedLang ||'en',perPage:12});
-    this.$store.dispatch("fetchMyInterests");
+    
     
   },
   computed:{

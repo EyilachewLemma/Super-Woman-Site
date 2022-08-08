@@ -7,7 +7,7 @@
         <div v-if="!isPhoneInput && !isCodeInput">
         <div class="text-white d-flex mt-4">
         <p class="me-5">Phone Number</p>
-         <p class="me-5">0948266629</p>
+         <p class="me-5">{{user.phone_number}}</p>
        </div>
     <button @click="changePhone()" class="btn rounded-pill mt-4 text-white">Chage Phone Number</button>
     </div>
@@ -145,7 +145,6 @@
 </template>
 <script>
 import apiClient from '../url/index'
-import fileApiClient from '../url/fileApi'
 import Vue3PhoneInput from "vue3-phone-input";
 import useValidate from "@vuelidate/core";
 import { required, helpers} from "@vuelidate/validators";
@@ -180,6 +179,12 @@ export default {
         }
       }
     },
+    computed:{
+      user(){
+        return this.$store.getters.user
+      }
+
+          },
     methods: {
           setCode(event, elementId) {
       if (elementId !== "codeSix" && event.target.value) {
@@ -196,12 +201,10 @@ export default {
      async resendCode() {
       try {
         this.resending = true;
-        var response = await apiClient.post("user/resend", {
+        await apiClient.post("user/resend", {
           phone_number: this.phone.number
         });
-        if (response.status === 200) {
-          localStorage.setItem("tokenu", response.data.access_token);
-        }
+        
       } finally {
         this.resending = false;
       }
@@ -218,9 +221,6 @@ export default {
         if (response.status === 201) {
           this.isPhoneInput = false
          this.isCodeInput = true
-          localStorage.setItem("tokenu", response.data.access_token);
-             apiClient.defaults.headers.common["Authorization"] = `Bearer ${response.data.access_token}`;
-             fileApiClient.defaults.headers.common["Authorization"] = `Bearer ${response.data.access_token}`; 
         }
         if(response.status === 200){
           this.notify = 'faild to send verification code, try again'
@@ -241,8 +241,11 @@ export default {
           var response = await apiClient.post("user/verify_phone", credential);
           if (response.status === 200) {
             this.isCodeInput = false
-            this.$toast.success(`your connection is terminated succussfuly`);
-            
+            var editedUser = this.user
+          editedUser.phone_number = this.phone.number
+          localStorage.setItem('supUser',JSON.stringify(editedUser))
+          this.$store.commit('setUser',editedUser)
+            this.$toast.success(`your phone number is changed successfully`);            
           }
         } finally {
           this.isLoading = false;
