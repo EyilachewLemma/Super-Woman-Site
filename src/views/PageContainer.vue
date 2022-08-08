@@ -24,8 +24,8 @@ export default {
     this.$store.dispatch("fetchFields");
      this.$store.dispatch('fetchLanguages') 
      this.$store.dispatch("fetchEducationLebles");
-    this.$store.dispatch("fetchRoleModels",{lang:selectedLang ||'en',perPage:12});
-    this.$store.dispatch("fetchBlogs",{lang:selectedLang ||'en',perPage:12});
+    this.$store.dispatch("fetchRoleModels",{lang:selectedLang ||'en',perPage:3});
+    this.$store.dispatch("fetchBlogs",{lang:selectedLang ||'en',perPage:4});
     
     
   },
@@ -39,8 +39,8 @@ export default {
   },
   watch:{
     lang(value){
-    this.$store.dispatch("fetchBlogs",{lang:value ||'en',perPage:12});
-    this.$store.dispatch("fetchRoleModels",{lang:value ||'en',perPage:12});
+    this.$store.dispatch("fetchBlogs",{lang:value ||'en',perPage:4});
+    this.$store.dispatch("fetchRoleModels",{lang:value ||'en',perPage:3});
     }
   },
   methods: {}

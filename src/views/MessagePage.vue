@@ -8,16 +8,17 @@
    </div>  
    <div class="text-white align-self-center">Eden Getachew</div>
     </div> 
-    <div class="px-2">
-        <div class="pt-3" v-for="(message,index) in messages" :key="message.id">
+    <div class="contentContainer pb-5">
+        <div class="px-2 pt-3" v-for="(message,index) in messages" :key="message.id">
         <div v-if="message.sender === 'mentor'" class="d-flex me-5">        
         <div class="smProfileCircle rounded-circle text-white me-2 align-self-end">
            <img :src="myMentor?.profile_picture" alt="mentor profile" class="img-fluid rounded-circle">
             </div> 
            <div class="position-relative text-white userone rounded p-2">
                <div class="text-break pt-1">{{message.message}}</div>
-               <p class="small pt-1 ms-auto my-0 d-flex">
-                <span class="ms-auto">{{formatDate(message.created_at)}}</span>
+               <p class="pt-1 ms-auto my-0 d-flex">
+                <span v-if="message.created_at === message.updated_at" class="ms-auto small">{{formatDate(message.created_at)}}</span>
+                <span v-else class="ms-auto small">edited {{formatDate(message.updated_at)}}</span>
                 </p>              
            </div>
            </div>
@@ -28,35 +29,29 @@
                  <button @click="deleteMessage(message.id,index)" class="deleteBtn small border rounded">delete</button>               
             </div>
                 <div class="text-break">{{message.message}}</div>
-               <p class="small pt-1 ms-auto my-0 d-flex">
-                <span class="ms-auto">{{formatDate(message.created_at)}}</span>
+               <p class="pt-1 ms-auto my-0 d-flex">
+                <span v-if="message.created_at === message.updated_at" class="ms-auto small">{{formatDate(message.created_at)}}</span>
+                <span v-else class="ms-auto small">edited {{formatDate(message.updated_at)}}</span>
                 </p>
                </div>
            </div>
         </div>
-          <div v-if="!isEdit" class="pt-3 messageInputContainer pb-1 px-3 fixed-bottom">
+    </div>
+     <div v-if="!isEdit" class="mt-3 pt-3 messageInput pb-1 px-3 fixed-bottom">
           <div class="input-group mb-3 msgInputGroup border px-3">
-               <textarea class="form-control border-0" placeholder="write message" id="floatingTextarea2" style="height: auto" v-model="newMessage" @keyup.enter="sendMessage"></textarea>
+               <textarea class="form-control border-0 mt-2" placeholder="write message" id="floatingTextarea2" style="height: auto" v-model="newMessage" @keyup.enter="sendMessage"></textarea>
                <button @click="sendMessage()" class="text-primary fs-4 sendBtn" type="button" id="sendBtn"><i class="fas fa-paper-plane sendIcon"></i></button>
            </div>  
-          <!-- <div class="input-group mb-3 msgInputGroup border px-3">
-        <input type="text" class="form-control form-control-lg msginput" placeholder="write message" aria-label="Recipient's username" aria-describedby="button-addon2" v-model="newMessage" @keyup.enter="sendMessage()">
-       <button @click="sendMessage()" class="text-primary fs-4 sendBtn" type="button" id="sendBtn"><i class="fas fa-paper-plane sendIcon"></i></button>
-     </div> -->
-    </div>
-     <div v-else-if="isEdit" class="pt-3 messageInputContainer pb-1 px-3 fixed-bottom">
+          
+    </div> 
+      <div v-else-if="isEdit" class="mt-3 pt-3 messageInput pb-1 px-3 fixed-bottom">
             <div class="input-group mb-3 msgInputGroup border px-3">
-               <textarea class="form-control border-0" placeholder="write message" id="floatingTextarea2" style="height: auto" v-model="newMessage" @keyup.enter="saveEditedMessage"></textarea>
+               <textarea class="form-control border-0 mt-2" placeholder="write message" id="floatingTextarea2" style="height: auto" ref="editBox" v-model="newMessage" @keyup.enter="saveEditedMessage"></textarea>
                <button @click="saveEditedMessage()" class="text-primary fs-4 sendBtn" type="button" id="editBtn"><i class="fas fa-paper-plane sendIcon"></i></button>
            </div> 
-          <!-- <div class="input-group mb-3 msgInputGroup border px-3">
-        <input type="text" class="form-control form-control-lg msginput" placeholder="write message" aria-label="Recipient's username" aria-describedby="button-addon2" v-model="newMessage" @keyup.enter="saveEditedMessage()">
-       <button @click="saveEditedMessage()" class="text-primary fs-4 sendBtn" type="button" id="editBtn"><i class="fas fa-paper-plane sendIcon"></i></button>
-     </div> -->
+          
     </div>
-    </div>
-  
-    </div>
+</div>
 </div>
      
 </template>
@@ -72,6 +67,7 @@ export default {
             pageCounter:1,
             isEdit:false,
             editedMessageId:null,
+            editedMessageIndex:null
 
         }
     },
@@ -121,11 +117,12 @@ export default {
          try{
                 var response = await apiClient.post('user/send_message',{message:this.newMessage})
                 if(response.status === 200){
-                    var arr = this.messages;
-                    arr.push(response.data)
-                    this.messages = arr
+                    var mesgArray = this.messages;
+                    mesgArray.push(response.data)
+                    this.messages = []
+                    this.messages = [...mesgArray]
                     this.newMessage = ''
-                    console.log('MESSAGE =',this.messages)
+                    console.log('MESSAGE =',response.data)
                     
                 }
             }
@@ -139,7 +136,7 @@ export default {
                { userAuthentication:  
                { endpoint: "/pusher_user_auth.php"}} 
                ) 
-       pusher.subscribe(`get_mentor_message.${this.user.id}`)
+       pusher.subscribe(`get_mentor_message.${this.user?.id}`)
       pusher.bind('newMessage', data => { 
         console.log('brodcasted data=',data)
            this.messages.push(data.message) 
@@ -169,13 +166,19 @@ export default {
         this.isEdit = true
         this.editedMessageId = message.id
         this.editedMessageIndex = index
+        window.requestAnimationFrame(()=>{
+            this.$refs.editBox.focus()
+        })
             
         },
        async saveEditedMessage(){
                try{
                 var response = await apiClient.put(`user/message/${this.editedMessageId}`,{message:this.newMessage})
                 if(response.status === 200){
-                    this.messages[this.editedMessageIndex,1] = response.data
+                    var mesgArray = this.messages;
+                    mesgArray[this.editedMessageIndex] = response.data
+                    this.messages = []
+                    this.messages = [...mesgArray]
                     this.isEdit = false
                     this.newMessage = ''
                     
@@ -192,12 +195,26 @@ export default {
 <style scoped>
 .wraper{
     width: 100%;
+    min-height: 100vh;
     background-color: #0f0e1c;
 }
 .messageBox{
     width: 100%;
     min-height: 100vh;
+    padding-bottom: 10%;
     background-color: #0f0e1c;
+}
+.contentContainer{
+    overflow-y: scroll;
+}
+.contentContainer::-webkit-scrollbar {
+  display: none;
+}
+
+/* Hide scrollbar for IE, Edge and Firefox */
+.contentContainer {
+  -ms-overflow-style: none;  /* IE and Edge */
+  scrollbar-width: none;  /* Firefox */
 }
 .backBtn{
     background: none;
@@ -219,16 +236,16 @@ export default {
     height: 100%;
 }
 .smProfileCircle{
-    max-width: 3rem;
-    min-height: 3rem;
-    max-height: 3rem;
+    max-width: 2.7rem;
+    min-height: 2.7rem;
+    max-height: 2.7rem;
     background-color: #e7453a;
     overflow: hidden;
 }
 .smProfileCircle img{
-    min-width: 100%;
-    max-height: 100%;
-    min-height: 100%;
+    width: 100%;
+    height: 2.7rem;
+    
 }
 .userone{
     max-width: 100%;
@@ -259,7 +276,7 @@ export default {
     text-decoration: underline;
     color:#e7453a
 }
-.messageInputContainer{
+.messageInput{
     max-width: 100%;
     background-color: #0d0d0d;
 }
@@ -276,6 +293,18 @@ input:focus,textarea:focus{
     color: #fff;
     box-shadow: none!important;
 }
+
+    /* Hide scrollbar for Chrome, Safari and Opera */
+textarea::-webkit-scrollbar {
+  display: none;
+}
+
+/* Hide scrollbar for IE, Edge and Firefox */
+textarea {
+  -ms-overflow-style: none;  /* IE and Edge */
+  scrollbar-width: none;  /* Firefox */
+}
+
 .msginput{
     box-shadow: none!important;
     border: none;
@@ -288,13 +317,13 @@ input:focus,textarea:focus{
     transform: rotate(45deg);
 }
 @media(min-width: 768px){
-    .messageBox,.messageInputContainer{
+    .messageBox,.messageInput{
         width: 60%;
         margin: auto;
     }
 }
 @media(min-width: 992px){
-    .messageBox,.messageInputContainer{
+    .messageBox,.messageInput{
         width: 50%;
         margin: auto;
     }

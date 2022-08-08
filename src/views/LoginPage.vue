@@ -228,7 +228,7 @@ export default {
           this.isLogin = false;
           this.loginConfirmModal.show();
           window.requestAnimationFrame(() => {
-            this.$refs["codeOne"].focus();
+            this.$refs["loginCode1"].focus();
           });
           apiClient.defaults.headers.common[
             "Authorization"
@@ -270,7 +270,7 @@ export default {
           console.log("entered value =", event.target.value);
         });
       } else if (elementId === "loginCodeSix") {
-        document.getElementById("code6").blur();
+        document.getElementById("loginCode6").blur();
         this.verificationCodes.push(event.target.value);
         this.isDisabled = false;
         console.log("length of code = ", this.verificationCodes.length);

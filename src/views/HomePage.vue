@@ -168,7 +168,7 @@
       <div class="row mx-2 mx-lg-3">
         <div class="col-6 col-md-4 col-lg-3 blogImage" v-for="blog in blogs.data" :key="blog.id">
           <div class="imgContainer">
-            <router-link :to="{name:'RoleModelDetail',params:{rolemodelId:blog?.id}}">
+            <router-link :to="{name:'BlogDetail',params:{blogId:blog.id}}">
               <img :src="blog.image?.path" alt="blog image" class="img-fluid rounded w-100" />
             </router-link>
           </div>

@@ -74,6 +74,18 @@ const routes = [{
                 ]
             },
             {
+                path: '/blogs',
+                name: 'Blogs',
+                component: () =>
+                    import ( /* webpackChunkName: "Blogs" */ '../views/BlogList.vue')
+            },
+            {
+                path: '/blog-detail/:blogId',
+                name: 'BlogDetail',
+                component: () =>
+                    import ( /* webpackChunkName: "BlogDetail" */ '../views/BlogDetail.vue')
+            },
+            {
                 path: '/account-setting',
                 name: 'AccountSetting',
                 component: () =>
