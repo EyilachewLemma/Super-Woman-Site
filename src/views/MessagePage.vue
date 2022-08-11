@@ -56,8 +56,9 @@
      
 </template>
 <script>
-import Pusher from 'pusher-js';
+// import Pusher from 'pusher-js';
 import apiClient from '@/url/index'
+import Ably from 'ably/build/ably-webworker.min';
 export default {
     data() {
         return {
@@ -131,17 +132,30 @@ export default {
             }
        }, 
        listenForChanges() {  
-          let pusher = new Pusher('51df02a0da376c37ab66', 
-               { cluster: 'ap2' }, 
-               { userAuthentication:  
-               { endpoint: "/pusher_user_auth.php"}} 
-               ) 
-       pusher.subscribe(`get_mentor_message.${this.user?.id}`)
-      pusher.bind('newMessage', data => { 
-        console.log('brodcasted data=',data)
-           this.messages.push(data.message) 
+    //       let pusher = new Pusher('51df02a0da376c37ab66', 
+    //            { cluster: 'ap2' }, 
+    //            { userAuthentication:  
+    //            { endpoint: "/pusher_user_auth.php"}} 
+    //            ) 
+    //    pusher.subscribe(`get_mentor_message.${this.user?.id}`)
+    //   pusher.bind('newMessage', data => { 
+    //     console.log('brodcasted data=',data)
+    //        this.messages.push(data.message) 
 
-      }) 
+    //   }) 
+    var ably = new Ably.Realtime('mwUvoA.QGPkKw:y7i6p7k948CC0nUVurkXNP8OdrKu3qBgFlRPHpGhzg8'); 
+       var channel = ably.channels.get(`private:get_mentor_message.72`);  
+    
+      channel.subscribe('newMessage', function(message) { 
+        
+            console.log('brodcasted data=',message)
+            var newMessage = this.messages
+           newMessage.push(message.data.message)  
+           this.messages = []
+           this.messages = [...newMessage]
+           console.log('after appending=',this.messages)
+         
+});
 
         },
         formatDate(createdAt){
@@ -206,6 +220,7 @@ export default {
 }
 .contentContainer{
     overflow-y: scroll;
+    max-height: 70vh;
 }
 .contentContainer::-webkit-scrollbar {
   display: none;

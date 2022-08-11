@@ -234,6 +234,7 @@ export default {
 .content{
   text-align: start;
 }
+a{text-decoration: none;}
 .borderBottom{
   border-bottom: 0.1rem solid #f69f83;
 }

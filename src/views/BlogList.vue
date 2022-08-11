@@ -92,6 +92,10 @@ methods: {
   -ms-overflow-style: none;  /* IE and Edge */
   scrollbar-width: none;  /* Firefox */
 }
+.fieldBox{
+  background-color: #002f5d;
+  color: #fff;
+}
 .fieldBox:focus{
     background-color: #002f5d;
 }

@@ -23,7 +23,7 @@
                   <p class="me-2 my-0">
                     <i class="fa-brands fa-google-play"></i>
                   </p>
-                  <button @click="getAppFromPlayStor()" class="my-0">
+                  <button @click="getAppFromPlayStor()" class="my-0 downloadApp">
                     Get Apps On
                     <br />google Play
                   </button>
@@ -34,7 +34,7 @@
                   <p class="me-2 my-0">
                     <i class="fa-brands fa-app-store"></i>
                   </p>
-                  <button @click="getAppFromAppStor()" class="my-0">
+                  <button @click="getAppFromAppStor()" class="my-0 downloadApp">
                     Get Apps On
                     <br />App Store
                   </button>
@@ -92,7 +92,7 @@
             <p class="me-2 my-0">
               <i class="fa-brands fa-google-play"></i>
             </p>
-            <button @click="getAppFromPlayStor()" class="my-0">
+            <button @click="getAppFromPlayStor()" class="my-0 downloadApp">
               Get Apps On
               <br />google Play
             </button>
@@ -103,7 +103,7 @@
             <p class="me-2 my-0">
               <i class="fa-brands fa-app-store"></i>
             </p>
-            <button @click="getAppFromAppStor()" class="my-0">
+            <button @click="getAppFromAppStor()" class="my-0 downloadApp">
               Get Apps On
               <br />App Store
             </button>
@@ -209,7 +209,7 @@
     <div class="col-md-6 pt-5">
       <div class="fs-2 fw-bold issue mt-4">SUBSCRIBE</div>
       <div class="text-white mt-3 fs-4 fw-bold">
-        Subscribe to get our new articls and role model in
+        Subscribe to get new articls and role model in
         <br />your inbox
       </div>
     </div>
@@ -238,7 +238,7 @@
   <div class="findMentor px-3 py-4 p-lg-5">
     <div class="findMentorBox px-2 py-5 px-lg-5">
       <div
-        class="text-center text-white pt-lg-3"
+        class="text-center text-white pt-lg-3 fw-bold"
       >ARE YOU LOOKING A MENTOR WHO HELP YOU ON YOUR DREAM</div>
       <div class="mt-3 mt-lg-5 text-center">
         <button @click="$router.push({name:'Mentors'})" class="btn findMentorBtn text-black">
@@ -250,7 +250,6 @@
       </div>
     </div>
   </div>
-  <!-- <TheFooter /> -->
   <!-- bottom nav for small device -->
   <BottomNav class="d-md-none" />
 </template>
@@ -316,15 +315,12 @@ export default {
   methods: {
     decreaseHeight() {
       this.isHover = true;
-      console.log("isHover= ", this.isHover);
     },
     increaseHeight() {
       this.isHover = false;
-      console.log("isHover= ", this.isHover);
-    },
+        },
     getAppFromAppStor(){
       this.$toast.success('product added to the cart')
-      console.log('get app from app store')
     },
     getAppFromPlayStor(){},
    
@@ -433,53 +429,16 @@ export default {
   color: #fff;
   z-index: 10;
 }
-@media (max-width: 768px) {
-  .leftImg {
-    margin-top: 5%;
-    width: 30%;
-    right: 30%;
-  }
-  .rightImg{
-    width: 30%;
-  }
-  .leftImgContainer:hover .leftImg {
-  width: 40%;
-  border-radius: 2rem;
-  margin-top: 0%;
-  right: 30%;
-  z-index: 1;
-}
-.leftImgContainer:hover .leftBtn {
-  display: inline;
-  position: absolute;
-  left: 35%;
-  text-decoration: none;
-  color: #fff;
-  z-index: 10;
-}
-.rightImageContainer:hover .rightBtn {
-  display: inline;
-  position: absolute;
-  top: 5%;
-  right: 18%;
-  text-decoration: none;
-  color: #fff;
-  z-index: 10;
-}
-.onHover img {
-   width: 60%;
-  margin-top: 5%;
-  border-radius: 1.5rem;
-  position: absolute;
-  right: 9%;
-  transition: all 1s ease-out;
-}
-}
 /* fore small device */
 .bgForSmallDevice {
   width: 100%;
-  height: 22em;
+  height: 15em;
   background-color: #e7453a;
+}
+.downloadApp{
+  border: none;
+  background: none;
+  color: #fff;
 }
 .homeBgText {
   background-color: #002f5d;
@@ -569,10 +528,59 @@ select {
   display: inline;
   color: red;
 }
+@media(min-width: 576px){
+  .bgForSmallDevice{
+   height: 30em;
+  }
+}
+@media (max-width: 768px) {
+  .leftImg {
+    margin-top: 5%;
+    width: 25%;
+    left: 25%;
+  }
+  .rightImg{
+    width: 35%;
+    right: 23%;
+  }
+  .leftImgContainer:hover .leftImg {
+  width: 35%;
+  border-radius: 2rem;
+  margin-top: 0%;
+  left: 25%;
+  z-index: 1;
+}
+.leftImgContainer:hover .leftBtn {
+  display: inline;
+  position: absolute;
+  left: 35%;
+  text-decoration: none;
+  color: #fff;
+  z-index: 10;
+}
+.rightImageContainer:hover .rightBtn {
+  display: inline;
+  position: absolute;
+  top: 5%;
+  right: 30%;
+  text-decoration: none;
+  color: #fff;
+  z-index: 10;
+}
+.onHover img {
+   width: 25%;
+  margin-top: 5%;
+  border-radius: 1.5rem;
+  position: absolute;
+  right: 23%;
+  transition: all 1s ease-out;
+}
+}
 @media(min-width: 768px){
   .recentRoleModels{
 margin-left: 8%;
 margin-right: 8%;
   }
 }
+
 </style>

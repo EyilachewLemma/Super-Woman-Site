@@ -22,7 +22,7 @@
           :to="{name:'RoleModels'}"
           class="text-white text-decoration-none me-4"
         >Role Models</router-link>
-        <router-link to="#" class="text-white text-decoration-none">Blog</router-link>
+        <router-link :to="{name:'Blogs'}" class="text-white text-decoration-none">Blog</router-link>
       </div>
 
       <div class="d-flex align-items-center mt-2">
@@ -370,8 +370,11 @@
     </template>
   </base-modal> -->
   <!-- sign up end -->
+
+
+
   <!-- signin modale -->
-  <div class="signIn">
+  <!-- <div class="signIn">
     <base-modal id="logIninfoModal">
       <template #modalBody>
         <div class="px-2 py-3 px-lg-5">
@@ -435,9 +438,11 @@
           </div>
         </div>
       </template>
-    </base-modal>
+    </base-modal> -->
+
     <!-- phone number verification for sign in -->
-    <base-modal id="loginConfirmModal">
+
+    <!-- <base-modal id="loginConfirmModal">
       <template #modalBody>
         <div class="px-2 py-3 px-lg-4">
           <div class="d-flex">
@@ -542,7 +547,7 @@
         </div>
       </template>
     </base-modal>
-  </div>
+  </div> -->
 </template>
 <script>
 import useValidate from "@vuelidate/core";
@@ -550,11 +555,11 @@ import { required, helpers } from "@vuelidate/validators";
 // import { Modal } from "bootstrap";
 import apiClient from "../url/index";
 import fileApiClient from "../url/fileApi";
-import Vue3PhoneInput from "vue3-phone-input";
+// import Vue3PhoneInput from "vue3-phone-input";
 export default {
-  components: {
-    Vue3PhoneInput
-  },
+  // components: {
+  //   Vue3PhoneInput
+  // },
   data() {
     return {
       v$: useValidate(),
