@@ -159,6 +159,17 @@ const routes = [{
         component: () =>
             import ( /* webpackChunkName: "Login" */ '../views/LoginPage.vue')
     },
+    {
+        path: '/login',
+        name: 'Login',
+        component: () =>
+            import ( /* webpackChunkName: "Login" */ '../views/LoginPage.vue')
+    },
+    {
+        path: '/:notfound(.*)',
+        name: 'Notfound',
+        redirect: '/'
+    },
 ]
 
 const router = createRouter({

@@ -28,8 +28,7 @@
     <span>{{formatDate(roleModelDetails.created_at)}}</span>
    </div>
     <p class="text-white me-2 ms-auto">{{roleModelDetails.like}}</p>
-     <p v-if="roleModelDetails.is_liked === 1" class="fs-4 text-primary"><i class="fas fa-thumbs-up"></i></p>
-    
+     <p v-if="roleModelDetails.is_liked === 1" class="fs-4 text-primary"><i class="fas fa-thumbs-up"></i></p>    
     <button v-else @click="likeRoleModel()" class="likeBtn fs-4 text-white"><i class="fas fa-thumbs-up"></i></button>
     <a href="#giveComment" class="ms-4 fs-5 text-white">{{roleModelDetails?.comment}}<i class="fas fa-comment-dots ms-2"></i></a>
    </div>
@@ -50,11 +49,18 @@ Your browser does not support the audio element.
     <button v-else @click="likeRoleModel()" class="likeBtn fs-4 text-white"><i class="fas fa-thumbs-up"></i></button>
    <a href="#giveComment" class="ms-4 fs-5 text-white">{{roleModelDetails?.comment}}<i class="fas fa-comment-dots ms-2"></i></a>
   <div class="d-flex ms-auto">
-     <button class="text-white fs-4 me-3"><i class="fab fa-facebook-square"></i></button>
-  <button class="text-white fs-4 me-3"><i class="fab fa-instagram-square"></i></button>
-  <button class="text-white fs-4 me-3"><i class="fab fa-twitter-square"></i></button>
-  <button class="text-white fs-4 me-3"><i class="fab fa-linkedin"></i></button>
-  <button class="text-white fs-4"></button>
+     <button class="text-white fs-4 me-3 socialLink"><i class="fab fa-facebook-square"></i></button>
+  <button class="text-white fs-4 me-3 socialLink"><i class="fab fa-instagram-square"></i></button>
+  <button class="text-white fs-4 me-3 socialLink"><i class="fab fa-twitter-square"></i></button>
+  <button class="text-white fs-4 me-3 socialLink"><i class="fab fa-linkedin"></i></button>
+  <button class="text-white fs-4 socialLink"></button>
+   <div class="position-relative">
+              <button @click="shareControl()" class="likeBtn text-white fs-4"><i class="fa-solid fa-share-nodes"></i></button>
+              <div v-if="isShare" class="socialMedia d-flex flex-column border rounded p-2">
+                  <button @click="shareOnFaceBook()" class="likeBtn bg-white mt-2">Share on Facebook</button>    
+                  <button @click="shareOnTwitter()" class="likeBtn bg-white mt-2">Share on Twitter</button> 
+              </div>
+            </div>
   </div>
 </div>
 </div>
@@ -62,8 +68,16 @@ Your browser does not support the audio element.
 <div class="comentSection ms-3 ms-lg-5 py-3 py-lg-5">
   <div class="row pt-3"> 
     <div class="col-md-7 me-lg-5">
-      <p class="text-white fw-bold">Comments({{comments?.length}})</p>
-      <div class="d-flex mt-3 mt-3">
+      <!-- write comment -->
+     <div v-if="!user" class="border rounded p-3 mt-3 d-flex justify-content-between">
+        <p class="text-white fw-bold">Comments({{comments?.length}})</p>
+        <button @click="displayCommentInput()" class="addCommentBtn border rounded p-2 text-white">
+          <span class="fs-5"><i class="fas fa-plus"></i></span>
+          <span class="ms-2">Write Comment</span>
+        </button>
+      </div>    
+       <p v-if="user" class="text-white fw-bold">Comments({{comments?.length}})</p>
+      <div v-if="user" class="d-flex mt-3 mt-3">
         <p class="align-self-center text-white fs-3 me-2"><i class="fas fa-user"></i></p>
      <div class="w-100" :class="{warning:v$.comment.$error}">
       <input @keyup.enter.prevent="sendComment()" id="giveComment" class="form-control form-control-lg border comentInput" type="text" placeholder="write your comment here" aria-label=".form-control-lg example" v-model="comment">
@@ -96,11 +110,30 @@ Your browser does not support the audio element.
       </div>
       </div>
   </div>
+      <base-modal id="firstVerifyModal">
+      <template #modalBody>
+        <div class="mt-4 text-center text-white p-4">
+          <p class="fs-2 fw-bold">Hey Dear User 👋</p>
+          <p class="fs-4 fw-bold">In order to react with the blog</p>
+          <p class="fs-4 fw-bold">Content First you have to Login</p>
+          <p class="fs-4 fw-bold"> or if yuo didn't have Account creat Account</p>
+          <div class="d-flex justify-content-center fs-3">
+            <button @click="gotoLoginFirst()" class="me-3 loginorSignUp text-primary">Login</button>
+            <span class="me-3">Or</span>
+            <button @click="createAccountFirst()" class="text-primary loginorSignUp">Create Account</button>
+          </div>
+          <div class="mt-5 d-flex">
+            <button @click="firstVerifyModal.hide()" class="btn closeBtn text-white ms-auto">Close</button>
+          </div>
+        </div>
+      </template>
+    </base-modal>
 </template>
 <script>
 import apiClient from '@/url/index'
 import useValidate from "@vuelidate/core";
 import { required, helpers} from "@vuelidate/validators";
+import {Modal} from 'bootstrap'
 export default {
   props:['rolemodelId'],
   data() {
@@ -110,7 +143,10 @@ export default {
       roleModelDetails:{},
       relatedRoleModels:[],
       images:[],
-      comments:[]
+      comments:[],
+      isLegalUser:false,
+      firstVerifyModal:null,
+      isShare:false,
     }
   },
   validations() {
@@ -124,6 +160,9 @@ export default {
       this.fetchRoleModelDetail(this.$route.params.rolemodelId,this.$store.getters.lang || 'en')
       this.fetchRelatedRoleModels(this.$store.getters.lang || 'en')
     },
+      mounted() {
+    this.firstVerifyModal = new Modal(document.getElementById("firstVerifyModal"));
+  },
     computed:{
       lang(){
       return this.$store.getters.lang
@@ -173,23 +212,22 @@ export default {
       this.fetchRoleModelDetail(id,this.lang)
       this.fetchRelatedRoleModels(this.lang)
     },
+    displayCommentInput(){
+         this.firstVerifyModal.show()
+    },
     async sendComment(){
-      if(this.user){
       this.v$.comment.$validate()
       if(!this.v$.comment.$error){
         var response = await apiClient.post(`user/add_comment/${this.$route.params.rolemodelId}`,{comment:this.comment})
         if(response.status === 200){
-           this.comments.push(response.data)
+          this.comment = ''
+           this.comments.unshift(response.data)
            this.roleModelDetails.comment+=1
+
         }
       
       }
-      }
-      else{
-        this.$router.push({name:'SignUp'})
-      }
-    },
-    async listenAudio(){
+     
     },
      formatDate(createdAt){
      var date = new Date(createdAt)
@@ -208,8 +246,30 @@ export default {
         }
       }
       else{
-        this.$router.push({name:'SignUp'})
+        this.firstVerifyModal.show()
       }
+    },
+     gotoLoginFirst(){
+      this.notifyModal.hide()
+      this.$router.push({name:'Login'})
+    },
+    createAccountFirst(){
+      this.notifyModal.hide()
+      this.$router.push({name:'SignUp'})
+    },
+    shareControl(){
+      this.isShare = !this.isShare
+    },
+     shareOnFaceBook(){
+      const navUrl = 'https://www.facebook.com/sharer/sharer.php?u=' + window.location.href;
+         window.open(navUrl , '_blank');
+         this.isShare = false
+    },
+    shareOnTwitter(){
+       const navUrl =
+    'https://twitter.com/intent/tweet?text=' + window.location.href;
+  window.open(navUrl, '_blank');
+  this.isShare = false
     },
 
   },
@@ -238,6 +298,10 @@ a{text-decoration: none;}
 .borderBottom{
   border-bottom: 0.1rem solid #f69f83;
 }
+.addCommentBtn{
+  border: none;
+  background: none;
+}
 .comentInput{
   background-color: #0f0e1c;
   color: #fff;
@@ -259,9 +323,17 @@ a{text-decoration: none;}
     min-width: 100%;
     height: 100%;
 }
+.socialLink{
+  background: none;
+  border: none;
+}
 .commentBtn,.likeBtn{
   background: none;
   border: none;
+}
+.socialMedia{
+  position: absolute;
+  right: 2%;
 }
 /* .relatedRoleModels{
   width: 20vw;
@@ -276,5 +348,8 @@ a{text-decoration: none;}
 }
 .relatedRoleModel{
   cursor: pointer;
+}
+.closeBtn{
+  background-color: #e7453a;
 }
 </style>

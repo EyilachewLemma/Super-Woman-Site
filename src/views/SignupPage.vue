@@ -301,12 +301,6 @@ export default {
         last_name: {
           required: helpers.withMessage("last name can not be empty", required)
         },
-        phone_no: {
-          required: helpers.withMessage(
-            "phone number can not be empty",
-            required
-          )
-        },
         date_of_birth: {
           required: helpers.withMessage("birth date is required", required)
         },
@@ -342,16 +336,17 @@ export default {
       this.userInfoModal.show();
     },
     async registerUser() {
-      this.isLoading = true;
       this.v$.userInfo.$validate();
       this.v$.phone.$validate();
       if (!this.v$.userInfo.$error && this.phone?.isValid) {
+        this.isLoading = true;
         this.userInfo.phone_number = this.phone?.number;
         try {
           var response = await apiClient.post("user/register", this.userInfo);
           if (response.status === 201) {
             this.isSignUp = false
             this.confirmModal.show();
+            this.emptyCode()
           }
         } catch (err) {
           console.log(err);
@@ -359,9 +354,7 @@ export default {
           this.isLoading = false;
         }
       }
-      this.emptyCode()
-      this.isSignUp = false
-      this.confirmModal.show();
+     
 
            
     },

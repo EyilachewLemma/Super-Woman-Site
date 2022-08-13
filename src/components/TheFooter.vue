@@ -13,7 +13,7 @@
           <router-link :to="{name:'Mentors'}" class="text-white">Mentors</router-link>
         </div>
         <div class="mb-3">
-          <router-link to="#" class="text-white">Blogs</router-link>
+          <router-link :to="{name:'Blogs'}" class="text-white">Blogs</router-link>
         </div>
       </div>
       <div class="contactSection">

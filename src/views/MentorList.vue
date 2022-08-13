@@ -32,7 +32,7 @@
             </div>
            
             <div class="px-2 mt-3">
-            <button @click="sendMentorRequest(mentor.id)" class="btn sendRequest text-white px-0 px-lg-1">Send Mentor Request</button>
+            <button v-if="!user?.mentor_id" @click="sendMentorRequest(mentor.id)" class="btn sendRequest text-white px-0 px-lg-1">Send Mentor Request</button>
             <button @click="viewMentorProfile(mentor)" class="btn viewProfile text-white mt-3">View Profile</button>
            </div>
            </div>
@@ -108,6 +108,9 @@
               <span v-else>Send Mentor Request</span>
             </button>
             <p class="text-danger text-center small">{{ notify }}</p>
+            <div class="d-flex">
+                <button @click="profileModal.hide()" class="btn border rounded closeBtn ms-auto text-white">Close</button>
+            </div>
           </div>
         </template>
         </base-modal>
@@ -122,7 +125,7 @@ export default {
             availabilities:[],
             experiences:[],
             mentorId:null,
-            profileModal:'',
+            profileModal:null,
             isExperience:true,
             isAvailability:false,
             isLoading:false,
@@ -141,6 +144,9 @@ export default {
     computed:{
         fields() {
       return this.$store.getters.fields;
+    },
+      user() {
+      return this.$store.getters.user;
     }
     },
     methods: {
@@ -280,6 +286,9 @@ select{
 }
 .experience:focus,.activeBtn{
 border-bottom: 2px solid #f69f83;
+}
+.closeBtn{
+    background:none
 }
 .v-enter-from{
     transform: translateX(20%);

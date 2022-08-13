@@ -8,7 +8,7 @@
    </div>  
    <div class="text-white align-self-center">Eden Getachew</div>
     </div> 
-    <div class="contentContainer pb-5">
+    <div class="contentContainer pb-5" id="myDiv">
         <div class="px-2 pt-3" v-for="(message,index) in messages" :key="message.id">
         <div v-if="message.sender === 'mentor'" class="d-flex me-5">        
         <div class="smProfileCircle rounded-circle text-white me-2 align-self-end">
@@ -123,7 +123,10 @@ export default {
                     this.messages = []
                     this.messages = [...mesgArray]
                     this.newMessage = ''
+                    var myDiv = document.getElementById("myDiv");
+                     myDiv.scrollTop = myDiv.scrollHeight;
                     console.log('MESSAGE =',response.data)
+          
                     
                 }
             }
@@ -149,11 +152,13 @@ export default {
       channel.subscribe('newMessage', function(message) { 
         
             console.log('brodcasted data=',message)
-            var newMessage = this.messages
+            var newMessage = [...this.messages]
            newMessage.push(message.data.message)  
            this.messages = []
            this.messages = [...newMessage]
            console.log('after appending=',this.messages)
+            var myDiv = document.getElementById("myDiv");
+             myDiv.scrollTop = myDiv.scrollHeight;
          
 });
 

@@ -1,5 +1,6 @@
 <template>
 <div class="px-3 pt-3">
+    <div v-if="myMentor">
     <button  @click="$router.back()" class="d-md-none backBnt text-white"><i class="fa-solid fa-angle-left"></i></button>
                 <div class="detailProfileCircle rounded-circle text-white">
                     <img v-if="myMentor?.profile_picture" :src="myMentor?.profile_picture" alt="mentor profile" class="img-fluid">
@@ -14,7 +15,7 @@
                 <button @click="showAvailability()" class="experience text-white px-2 px-md-5">Availabile Time</button>
             </div>
             <transition>
-            <div v-if="isExperience" class="mt-3 experienceDiv pb-2">
+            <div v-if="isExperience && myMentor.experiances?.length" class="mt-3 experienceDiv pb-2">
                 <div v-for="experience in myMentor.experiances" :key="experience.id">
                    <p class="text-white">{{experience.position}} at {{experience.organization}}</p>
                    <p class="text-white">from {{experience.from+' to '+experience.to}}</p>
@@ -22,7 +23,7 @@
             </div>
             </transition>
             <transition>
-            <div v-if="isAvailability" class="availability border rounded shadow-sm p-3 mt-3 bg-white text-dark">
+            <div v-if="isAvailability && myMentor.availablites?.length" class="availability border rounded shadow-sm p-3 mt-3 bg-white text-dark">
                    <p>I will be free in the following times</p>
                    <p v-for="freeTime in myMentor.availablites" :key="freeTime.id" class="mt-3">{{freeTime.day+' '+freeTime.from+' to '+freeTime.to}}</p>
             </div>
@@ -32,6 +33,17 @@
                 <button @click="sendMessage()" class="btn text-white sendMessage">Send Message</button>
           </div>
             <p class="text-danger text-center small">{{ notify }}</p>
+          </div>
+          <div v-else>
+            <div class="text-white mt-5">
+                <p class="fs-5 fw-bold text-center">You didn't have mentor yet</p>
+                <div class="findMentor rounded px-3 py-3 mt-3 text-white text-center">
+            <p>Are you looking a mentor,</p>
+            <p>for advice in your dream ?</p>
+            <button @click="findMentor()" class="btn rounded-pill bg-white text-dark ms-5 mt-3">Find Mentor</button>
+        </div>
+            </div>
+          </div>
           </div>
 </template>
 <script>
@@ -70,6 +82,10 @@ export default {
                     // this.myMentor = response.data
                     console.log('my mentor =', response.data)
                     this.$toast.success(`your connection is terminated succussfuly`);
+                    this.$store.commit('setMyMentor',null)
+                    var user = JSON.parse(localStorage.getItem('supUser'))
+                    user.mentor_id = 0
+                    localStorage.setItem('supUser',JSON.stringify(user))
                 }
             } catch (err) {
             this.$toast.error();(`Faild to Disconnect try again`);
@@ -78,6 +94,9 @@ export default {
         sendMessage(){
             this.$router.push({name:'Chat'})
         },
+        findMentor(){
+      this.$router.push({name:'Mentors'})
+    }
     },
 }
 </script>
@@ -110,6 +129,9 @@ border-bottom: 2px solid #f69f83;
 }
 .sendMessage{
     background-color: #e7453a;
+}
+.findMentor{
+    background-color: #002f5d;
 }
 .v-enter-from{
     transform: translateX(20%);

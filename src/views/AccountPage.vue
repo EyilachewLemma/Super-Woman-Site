@@ -105,7 +105,7 @@
         <div class="findMentor rounded px-3 py-3 mt-3 text-white">
             <p>Are you looking a mentor,</p>
             <p>for advice in your dream ?</p>
-            <button class="btn rounded-pill bg-white text-dark ms-5 mt-3">Find Mentor</button>
+            <button @click="findMentor()" class="btn rounded-pill bg-white text-dark ms-5 mt-3">Find Mentor</button>
         </div>
 
          <div class="pt-2 mt-3">
@@ -208,6 +208,9 @@ export default {
       this.isUploading = false
     }
     },
+    findMentor(){
+      this.$router.push({name:'Mentors'})
+    }
     },
 }
 </script>
@@ -224,6 +227,7 @@ export default {
     color: black;
 }
 a{
+  text-decoration: none;
     color: #fff;
 }
 .detailProfileCircle {

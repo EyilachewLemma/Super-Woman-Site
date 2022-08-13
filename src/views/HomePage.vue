@@ -124,7 +124,7 @@
         <div class="imgContainer">
           <router-link :to="{name:'RoleModelDetail',params:{rolemodelId:roleModel?.id}}">
             <img
-              :src="roleModel.image?.path"
+              :src="roleModel.card_image"
               alt="role model image"
               class="img-fluid rounded"
             />

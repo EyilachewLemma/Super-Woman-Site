@@ -6,7 +6,7 @@
       <div class="row">
         <div class="col-6 col-sm-12 roleModeImg">
        <router-link :to="{name:'RoleModelDetail',params:{rolemodelId:roleModel.id}}">
-        <img :src="roleModel.image?.path" alt="role model image" class="img-fluid rounded w-100" /></router-link>
+        <img :src="roleModel.card_image" alt="role model image" class="img-fluid rounded w-100" /></router-link>
         </div>
         <div class="col-6 col-sm-12">
         <div class="d-flex justify-content-between mt-md-3 align-items-center">
