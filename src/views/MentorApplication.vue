@@ -26,8 +26,13 @@
   <input type="email" class="form-control text-white" id="email" v-model="mentor.email">
   <span class="error-msg mt-1">{{v$.mentor.email.$errors[0]?.$message}}</span>
 </div> 
+ <div class="mb-3" :class="{ warning: v$.mentor.location.$error }">
+  <label for="location" class="form-label">Location</label>
+  <input type="text" class="form-control text-white" id="location" v-model="mentor.location">
+  <span class="error-msg mt-1">{{v$.mentor.location.$errors[0]?.$message}}</span>
+</div> 
 <div class="mb-3" :class="{ warning: v$.mentor.bio.$error }">
-  <label for="personality" class="form-label">Describe your Strangth in short</label>
+  <label for="personality" class="form-label">Describe your self in short</label>
   <textarea class="form-control text-white" style="height:auto" id="personality" rows="3" v-model="mentor.bio"></textarea>
   <span class="error-msg mt-1">{{v$.mentor.bio.$errors[0]?.$message}}</span>
 </div>
@@ -59,7 +64,7 @@
       </div>
       <div class="modal-body">
         <div class="fs-4 fw-bold text-success">You have registered successfully</div>
-      <p>We will see your request</p>
+      <p>We will see your request and notify you via your email</p>
       please download the mobil application from <a href="">download the mobile application from here</a>
       <p class="fw-bold"><i>Thank You</i></p>
       </div>
@@ -105,7 +110,11 @@ export default {
          email:{
           required:helpers.withMessage('email is required',required),
           email
-        }
+        },
+         location:{
+          required:helpers.withMessage('location is required',required)
+        },
+        
       }
     }
   },

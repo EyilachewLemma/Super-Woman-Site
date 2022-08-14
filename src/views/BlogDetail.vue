@@ -311,9 +311,6 @@ export default {
   position: absolute;
   right: 5%;
 }
-.sideIcon:hover .toolTip{
-   display: block;
-}
 .fieldBox{
    background-color: #1d213a;
 }
@@ -378,17 +375,22 @@ export default {
 }
 .relatedBlog{
   width: 20%;
+   position: fixed;
+  top: 12%;
+  overflow-y: scroll;
     background-color: #14141f;
    border-right: 0.5px solid rgb(145, 142, 142);
+   cursor: pointer;
 
 }
-.relatedBlog{
-  cursor: pointer;
+.relatedBlog::-webkit-scrollbar {
+  display: none;
 }
-.relatedBloglg{
-  position: fixed;
-  top: 12%;
- 
+
+/* Hide scrollbar for IE, Edge and Firefox */
+.relatedBlog {
+  -ms-overflow-style: none;  /* IE and Edge */
+  scrollbar-width: none;  /* Firefox */
 }
 .loginorSignUp{
   border: none;
