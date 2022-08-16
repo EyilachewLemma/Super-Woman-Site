@@ -23,7 +23,7 @@
             </div>
             </transition>
             <transition>
-            <div v-if="isAvailability && myMentor.availablites?.length" class="availability border rounded shadow-sm p-3 mt-3 bg-white text-dark">
+            <div v-if="isAvailability && myMentor.availablites?.length" class="availability border rounded shadow-sm p-3 mt-3 text-white">
                    <p>I will be free in the following times</p>
                    <p v-for="freeTime in myMentor.availablites" :key="freeTime.id" class="mt-3">{{freeTime.day+' '+freeTime.from+' to '+freeTime.to}}</p>
             </div>
@@ -63,6 +63,9 @@ export default {
     computed:{
         myMentor(){
             return this.$store.getters.myMentor
+        },
+        user(){
+            return this.$store.getters.user
         }
     },
     methods: {
@@ -83,9 +86,10 @@ export default {
                     console.log('my mentor =', response.data)
                     this.$toast.success(`your connection is terminated succussfuly`);
                     this.$store.commit('setMyMentor',null)
-                    var user = JSON.parse(localStorage.getItem('supUser'))
+                    var user = this.user
                     user.mentor_id = 0
-                    localStorage.setItem('supUser',JSON.stringify(user))
+                    this.$store.commit('setUser',user)
+                
                 }
             } catch (err) {
             this.$toast.error();(`Faild to Disconnect try again`);

@@ -31,6 +31,12 @@
   <input type="text" class="form-control text-white" id="location" v-model="mentor.location">
   <span class="error-msg mt-1">{{v$.mentor.location.$errors[0]?.$message}}</span>
 </div> 
+ <div class="mb-3">
+   <label for="fieldId" class="form-label">Select field of study</label>
+  <select class="form-select" id="fieldId" aria-label="Default select example" v-model="mentor.field_id">
+  <option v-for="field in fields" :key="field.id" :value="field.id">{{field.title}}</option>
+</select>
+ </div>
 <div class="mb-3" :class="{ warning: v$.mentor.bio.$error }">
   <label for="personality" class="form-label">Describe your self in short</label>
   <textarea class="form-control text-white" style="height:auto" id="personality" rows="3" v-model="mentor.bio"></textarea>
@@ -73,6 +79,7 @@
       </div>
     </div>
   </div>
+  <span>{{fields}}</span>
 </div>
 </template>
 <script>
@@ -87,6 +94,7 @@ export default {
       mentor:{},
     isLoading:false,
     successModal:null,
+    notify:''
     }
   },
   validations(){
@@ -121,6 +129,11 @@ export default {
   mounted() {
     this.successModal = new Modal(document.getElementById('successModal'))
   },
+  computed:{
+    fields() {
+      return this.$store.getters.fields;
+    },
+  },
 methods: {
    async registoreMentor(){
     this.v$.mentor.$validate()
@@ -151,11 +164,11 @@ methods: {
 .wraper{
  width: 100%;
 }
-input,textarea{
+input,textarea,select{
   background-color: #0f0e1c;
   color: #fff;
 }
-input:focus,textarea:focus{
+input:focus,textarea:focus,select:focus{
    background-color: #0f0e1c;
 }
 .confirmBtn{

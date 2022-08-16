@@ -1,5 +1,5 @@
 <template>
- <div class="wraper py-5">
+ <div class="wraper py-3 py-lg-5">
         <div v-if="isLogin" class="signIn border rounded shadow-sm  p-4">
           <div class="d-flex">
             <button @click="$router.back()" class="text-white backBtn fs-4">
@@ -8,9 +8,9 @@
             <div class="text-white fs-5 ms-auto me-auto">Sign In</div>
           </div>
           <p class="text-white text-center fs-4 fw-bold mt-3">Welcome to Super Woman</p>
-          <div class="mt-3" :class="{ warning: v$.phone.$error }">
+          <div class="mt-3 w-100" :class="{ warning: v$.phone.$error }">
             <label for="loginphone" class="form-label text-white">Phone Number</label>
-            <vue3-phone-input class="text-white p-0" v-model="phone" outlined id="loginphone" />
+            <vue3-phone-input class="text-white p-0 phoneInput" v-model="phone" outlined id="loginphone" />
             <span
               v-if="v$.phone.$error && !phone?.isValid"
               class="error-msg mt-1"
@@ -196,7 +196,8 @@ export default {
       resending: false,
       notify: "",
       phone: "",
-      rememberMe: true
+      rememberMe: true,
+      isDisabled:true
     };
   },
   validations() {
@@ -239,7 +240,11 @@ export default {
         if (response.status === 200) {
           this.notify = "faild to send verification code";
         }
-      } finally {
+      }
+      catch(err){
+        this.notify = 'faild to login'
+      }
+       finally {
         this.isLoading = false;
       }
     },
@@ -266,14 +271,11 @@ export default {
         window.requestAnimationFrame(() => {
           this.$refs[elementId].focus();
           this.verificationCodes.push(event.target.value);
-          console.log("length of code = ", this.verificationCodes.length);
-          console.log("entered value =", event.target.value);
         });
       } else if (elementId === "loginCodeSix") {
         document.getElementById("loginCode6").blur();
         this.verificationCodes.push(event.target.value);
         this.isDisabled = false;
-        console.log("length of code = ", this.verificationCodes.length);
       }
     },
     async confirmLoginVerification() {
@@ -304,20 +306,14 @@ export default {
       }
     },
     saveUserData(response) {
-      apiClient.defaults.headers.common[
-        "Authorization"
-      ] = `Bearer ${response.data.access_token}`;
-      fileApiClient.defaults.headers.common[
-        "Authorization"
-      ] = `Bearer ${response.data.access_token}`;
+      apiClient.defaults.headers.common["Authorization"] = `Bearer ${response.data.access_token}`;
+      fileApiClient.defaults.headers.common["Authorization"] = `Bearer ${response.data.access_token}`;
       this.$store.commit("setUser", response.data.user);
-      this.$store.commit("setIsAuthenticated", true);
-      let user = response.data.user;
-
-      localStorage.setItem("tokenu", response.data.access_token);
-      localStorage.setItem("supUser", JSON.stringify(user));
-      localStorage.setItem("isLegalUser", true);
-
+       localStorage.setItem("tokenu", response.data.access_token);
+      // this.$store.commit("setIsAuthenticated", true);
+      // let user = response.data.user;     
+      // localStorage.setItem("supUser", JSON.stringify(user));
+      // localStorage.setItem("isLegalUser", true);
       let toPath = this.$route.query.to || "/";
       this.$router.push(toPath);
     },
@@ -342,8 +338,22 @@ background-color: #0f0e1c;
 }
 .signIn{
   width: 100%;
+  height: 85vh;
   margin: auto;
    background-color: #1d213a;
+   overflow-y: auto;
+}
+.signIn::-webkit-scrollbar {
+  display: none;
+}
+
+/* Hide scrollbar for IE, Edge and Firefox */
+.signIn {
+  -ms-overflow-style: none;  /* IE and Edge */
+  scrollbar-width: none;  /* Firefox */
+}
+.phoneInput{
+  min-width: 100%;
 }
 input,
 select {

@@ -121,10 +121,10 @@ export default createStore({
                 commit('setIsLoading', false)
             }
         },
-        async fetchBlogs({ commit }) {
+        async fetchBlogs({ commit }, queryObject) {
             try {
                 commit('setIsLoading', true)
-                var response = await apiClient.get(`user/get_blogs?lang=${'en'}`)
+                var response = await apiClient.get(`user/get_blogs?lang=${queryObject.lang}&search=${queryObject?.searchBy}&filter=${queryObject?.filterBy}&per_page=${queryObject.perPage}`)
                 if (response.status === 200) {
                     commit('setBlogs', response.data)
                     console.log('blogs =', response.data)

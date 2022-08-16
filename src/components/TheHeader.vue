@@ -35,6 +35,12 @@
   <option v-for="language in languages" :key="language.id" :value="language.code" class="text-dark">{{language.name}}</option>
 </select>
 </div>
+    <div v-if="user?.mentor_id">
+    <button @click="gotoChatRoom()" class="notificationIcon text-white position-relative">
+      <span class="fs-5">  <i class="fas fa-comment-alt"></i></span>
+      <p v-if="user?.message_no" class="position-absolute top-0 text-primary px-1">{{user?.message_no}}</p>
+    </button>
+   </div>
         <div v-if="user" class="dropdown p-0 ms-4">
           <button
             class="btn profileBtn rounded-pill text-white py-0"
@@ -124,6 +130,14 @@ export default {
     gotoSignup() {
       this.$router.push({name:'SignUp'})
     },
+   async gotoChatRoom(){
+      await apiClient.get('user/set_messages_seen')
+      this.$router.push({name:'Chat'})
+      var user = this.user
+      user.message_no = 0
+      this.$store.commit('setUser',user)
+     
+    },
     gotoLogin() {
       this.$router.push({name:'Login'})
     },
@@ -131,10 +145,10 @@ export default {
       var response = await apiClient.post("user/logout");
       if (response.status === 200) {
         this.$store.commit("setUser", null);
-        this.$store.commit("setIsAuthenticated", false);
+        // this.$store.commit("setIsAuthenticated", false);
         localStorage.setItem("tokenu", null);
-        localStorage.setItem("supUser", null);
-        localStorage.setItem("isLegalUser", false);
+        // localStorage.setItem("supUser", null);
+        // localStorage.setItem("isLegalUser", false);
 
         let toPath = this.$route.query.to || "/";
         this.$router.push(toPath);
@@ -203,6 +217,10 @@ select{
   border: none;
   box-shadow: none!important;
 }
+.notificationIcon{
+  background: none;
+  border: none;
+}
 .selectSm{
   width: 15rem;
 }
@@ -233,6 +251,17 @@ background-color: gainsboro;
 }
 /* @media(max-width: 768px){
 } */
+@media (max-width: 576px) {
+  .logo {
+    min-width: 20%;
+    max-width: 20%;
+    height: auto;
+  }
+  .logoMarker {
+    min-width: 60%;
+    max-width: 60%;
+  }
+}
 @media (min-width: 576px) {
   .logo {
     min-width: 10%;

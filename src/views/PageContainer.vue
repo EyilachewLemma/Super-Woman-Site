@@ -6,10 +6,11 @@
   </div>
   <div v-if="isLoading" class="loading loading-screen route-loading p-0 position-fixed top-0 start-0 bottom-0 end-0 w-100 h-100 bg-white">
           <div class="loading-spinner d-flex justify-content-center mt-5 position-relative">
-            <img src="../assets/logo.png" alt="slow connection" class="img-fluid spiner" />
-            <img src="../assets/spiner.gif" alt="slow connection" class="spinerIcon position-absolute top-50 start-50">
+            <!-- <img src="../assets/logo.png" alt="slow connection" class="img-fluid spiner" /> -->
+            <img src="../assets/spiner.gif" alt="slow connection" class="spinerIcon position-absolute">
           </div>
         </div>
+        <div class="fixed-bottom d-md-none"><BottomNav /></div>
 </template>
 <script>
 import TheHeader from "../components/TheHeader.vue";
@@ -50,7 +51,7 @@ export default {
 .wraperContainer{
   background-color: #0f0e1c;
 }
-.loading{
+/* .loading{
     min-width: 100%;
     min-height: 100vh;
      position: absolute;
@@ -60,9 +61,5 @@ export default {
      left: 0;
      background-color: #fff;
      z-index: 1;
-}
-.spiner{
-  width: 25%;
-  margin: auto;
-}
+} */
 </style>

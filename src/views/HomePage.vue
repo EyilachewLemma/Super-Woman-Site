@@ -251,7 +251,7 @@
     </div>
   </div>
   <!-- bottom nav for small device -->
-  <BottomNav class="d-md-none" />
+  <!-- <BottomNav class="d-md-none" /> -->
 </template>
 <script>
 // import BottomNav from '../components/BottomNav.vue'
@@ -294,7 +294,6 @@ export default {
 
   created() {
     
-    console.log("is the paht is home page==", this.$route.meta.ishome);
   },
   
   computed: {

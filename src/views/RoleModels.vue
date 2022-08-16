@@ -38,13 +38,14 @@ export default {
     return {
       perPage:12,
       pageCounter:1,
+      roleModelScrollHandler:null,
     }
   },
 created() {  
   this.$store.dispatch('fetchRoleModels',{lang:this.$store.getters.lang,perPage:this.perPage})
 },
  mounted() {
-        window.addEventListener('scroll',()=>{
+      this.roleModelScrollHandler =  window.addEventListener('scroll',()=>{
             let scrollTop = document.documentElement.scrollTop
             let scrollHeight = document.documentElement.scrollHeight
             let clientHeight = document.documentElement.clientHeight
@@ -56,7 +57,7 @@ created() {
         })
     },
      unmounted() {
-        window.removeEventListener('scroll', this.handleScroll)
+        window.removeEventListener('scroll', this.roleModelScrollHandler,true)
     },
 computed:{
   roleModels(){
@@ -90,7 +91,7 @@ methods: {
   transition: all 1s;
 }
 .roleModeImg img:hover{
-  transform: scale(1.5);
+  transform: scale(1.2);
 }
 .issue {
   color: #f69f83;

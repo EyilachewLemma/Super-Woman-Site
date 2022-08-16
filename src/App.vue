@@ -7,20 +7,19 @@ import fileApiClient from './url/fileApi'
 export default {
    created() {
     var token = localStorage.getItem("tokenu")
-         this.$store.commit('setLang',localStorage.getItem('language') || 'en')         
-    console.log('loged in user = ',JSON.parse(localStorage.getItem('supUser')))
-      this.$store.commit("setUser", JSON.parse(localStorage.getItem('supUser')) || null);
+         this.$store.commit('setLang',localStorage.getItem('language') || 'en') 
      apiClient.defaults.headers.common["Authorization"] = `Bearer ${token}`; 
       fileApiClient.defaults.headers.common["Authorization"] = `Bearer ${token}`; 
-      this.$store.commit("setIsAuthenticated", localStorage.getItem('isLegalUser') || false); 
+        //  this.$store.commit("setIsAuthenticated", localStorage.getItem('isLegalUser') || false);
+      this.featchUser(token)
    
    
   },
-  // unmounted() {
-  //   if(!localStorage.getItem("remember")){
-  //       this.logout()
-  //   }
-  // },
+  unmounted() {
+    if(!localStorage.getItem("remember")){
+        this.logout()
+    }
+  },
   methods: {
     async logout(){
         try{
@@ -28,15 +27,26 @@ export default {
       console.log('response status',response.status)
       if(response.status === 200){
             this.$store.commit('setUser', null)
-      this.$store.commit('setIsAuthenticated', false)
-       localStorage.removeItem("tokenu");
-            localStorage.removeItem("supUser");
-            localStorage.removeItem("isLegalUser");
+            localStorage.removeItem("tokenu");
+      // this.$store.commit('setIsAuthenticated', false)       
+            // localStorage.removeItem("supUser");
+            // localStorage.removeItem("isLegalUser");
       }
     }
     catch(err){
       console.log("errors from logout path = ")
     }
+    },
+    async featchUser(token){
+      if(token){
+        var response = await apiClient.get('user/user')
+      if(response.status === 200){
+        this.$store.commit("setUser",response.data)
+      }
+      }
+      else{
+        this.$store.commit("setUser",null)
+      }
     }
   },
 }

@@ -11,7 +11,7 @@
         <div class="position-relative">
           <div class="detailProfileCircle rounded-circle mt-4">
         <img
-          v-if="!image && user.profile_picture"
+          v-if="!image && user?.profile_picture"
           :src="user?.profile_picture"
           alt="admin profile picture"
           class="img-fluid radius-circled"
@@ -226,7 +226,7 @@ export default {
         this.$toast.success(`your profile picture is changed`);
         this.imageFile = ''
         this.image = false
-        localStorage.setItem('supUser',JSON.stringify(response.data))
+        // localStorage.setItem('supUser',JSON.stringify(response.data))
         this.$store.commit('setUser',response.data)
         // this.$toast.success('your profile photo is changed successfully')
 
@@ -246,7 +246,7 @@ export default {
           var response = await apiClient.post("user/update_profile", this.user);
           if (response.status === 200) {
             this.$toast.success(`your profile informatins is updated`);
-            localStorage.setItem('supUser',JSON.stringify(response.data))
+            // localStorage.setItem('supUser',JSON.stringify(response.data))
             this.$store.commit('setUser',response.data)
             console.log('success')
           }

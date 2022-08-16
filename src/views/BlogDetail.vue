@@ -26,8 +26,8 @@
    <div class="fs-1 fw-bold pt-3">
     <span class="text-white">{{blogDetail.blog_title}}</span>
 </div>
-<div class="mt-2">
-  <span class="fieldBox text-white fw-bold p-2 rounded me-2" v-for="field in blogDetail.fields" :key="field.id">{{field.title}}</span>
+<div class="mt-2 d-flex flex-wrap">
+  <p class="fieldBox text-white fw-bold p-2 rounded me-2 mt-3" v-for="field in blogDetail.fields" :key="field.id">{{field.title}}</p>
   <span class="issue ms-3">{{blogDetail.time_to_read}} min Read</span>
 </div>
 <div class="d-flex mt-3">
@@ -130,7 +130,7 @@
           <p class="fs-2 fw-bold">Hey Dear User 👋</p>
           <p class="fs-4 fw-bold">In order to react with the blog</p>
           <p class="fs-4 fw-bold">Content First you have to Login</p>
-          <p class="fs-4 fw-bold"> or if yuo didn't have Account creat Account</p>
+          <p class="fs-4 fw-bold"> or if you didn't have Account create Account</p>
           <div class="d-flex justify-content-center fs-3">
             <button @click="gotoLoginFirst()" class="me-3 loginorSignUp text-primary">Login</button>
             <span class="me-3">Or</span>

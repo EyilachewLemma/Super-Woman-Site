@@ -1,7 +1,7 @@
 <template>
-<div class="wraper py-4 px-3 px-lg-5">
+<div class="wraper pt-4 pb-5 px-3 px-lg-5">
   <!-- sign up code -->
-  <div v-if="isSignUp" class="signUp border rounded shadow-sm p-4">
+  <div v-if="isSignUp" class="signUp border rounded shadow-sm p-4 mb-5">
           <div class="d-flex">
             <button @click="$router.back()" class="text-white backBtn fs-4">
              <i class="fas fa-chevron-left"></i>
@@ -191,7 +191,7 @@
           </div>
           <div class="d-grid gap-2">
             <button
-              @click="confirmVerification()"
+              @click="confirmVerificationCode()"
               class="btn w-100 confirmBtn mt-3 text-white"
               :disabled="isLoading ||isDisabled"
             >
@@ -402,14 +402,14 @@ export default {
         
       }
     },
-    async confirmVerification() {
-      this.confirmVerification = []
-      this.confirmVerification.push(this.code1)
-      this.confirmVerification.push(this.code2)
-      this.confirmVerification.push(this.code3)
-      this.confirmVerification.push(this.code4)
-      this.confirmVerification.push(this.code5)
-      this.confirmVerification.push(this.code6)
+    async confirmVerificationCode() {
+      this.verificationCodes = []
+      this.verificationCodes.push(this.code1)
+      this.verificationCodes.push(this.code2)
+      this.verificationCodes.push(this.code3)
+      this.verificationCodes.push(this.code4)
+      this.verificationCodes.push(this.code5)
+      this.verificationCodes.push(this.code6)
       console.log('length of code sent to server=',this.confirmVerification.length)
       if (this.verificationCodes.length * 1 === 6) {
         this.isLoading = true;
@@ -428,6 +428,9 @@ export default {
         } finally {
           this.isLoading = false;
         }
+      }
+      else{
+        this.notify = 'incorrect verification code'
       }
     },
     selectInterest(fieldId, elementId) {
@@ -470,19 +473,14 @@ export default {
      this.$router.push({name:'Login'})
     },
     saveUserData(response) {
-      apiClient.defaults.headers.common[
-        "Authorization"
-      ] = `Bearer ${response.data.access_token}`;
-      fileApiClient.defaults.headers.common[
-        "Authorization"
-      ] = `Bearer ${response.data.access_token}`;
-      this.$store.commit("setUser", response.data.user);
-      this.$store.commit("setIsAuthenticated", true);
-      let user = response.data.user;
-
+      apiClient.defaults.headers.common["Authorization"] = `Bearer ${response.data.access_token}`;
+      fileApiClient.defaults.headers.common["Authorization"] = `Bearer ${response.data.access_token}`;
       localStorage.setItem("tokenu", response.data.access_token);
-      localStorage.setItem("supUser", JSON.stringify(user));
-      localStorage.setItem("isLegalUser", true);
+      this.$store.commit("setUser", response.data.user);
+      // this.$store.commit("setIsAuthenticated", true);
+      // let user = response.data.user;      
+      // localStorage.setItem("supUser", JSON.stringify(user));
+      // localStorage.setItem("isLegalUser", true);
 
       let toPath = this.$route.query.to || "/";
       this.$router.push(toPath);
@@ -499,9 +497,19 @@ background-color: #0f0e1c;
 }
 .signUp{
   width: 100%;
+  height: 85vh;
   margin: auto;
    background-color: #1d213a;
-   overflow-y: auto;
+   overflow-y: scroll;
+}
+.signUp::-webkit-scrollbar {
+  display: none;
+}
+
+/* Hide scrollbar for IE, Edge and Firefox */
+.signUp {
+  -ms-overflow-style: none;  /* IE and Edge */
+  scrollbar-width: none;  /* Firefox */
 }
 input,
 select {

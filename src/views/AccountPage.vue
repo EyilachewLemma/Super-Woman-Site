@@ -160,13 +160,15 @@
                 </button>
             </div>
     </div>
+        
 </template>
 <script>
 import fileApiClient from "../url/fileApi";
+// import BottomNav from "@/components/BottomNav.vue";
 export default {
-    // components:{
-    //     AccontDetail
-    // },
+    components:{
+        // BottomNav
+    },
     data() {
         return {
             editInfoModal:null,

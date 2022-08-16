@@ -1,6 +1,6 @@
 <template>
     <div class="wraper px-3 pt-3 px-lg-5 pb-5 rounded my-5 ">
-       <button @click="$router.back()" class="text-white fs-4 mb-4">
+       <button @click="$router.back()" class="backbtn text-white fs-4 mb-4">
               <i class="fas fa-angle-left"></i>
             </button>
         <div class="text-white">Specify what you want to learn</div>
@@ -23,7 +23,7 @@
               </span>
               <span v-else>Send Request</span>
             </button>
-            <p class="text-center small" :class="{success:isSuccess,fail:!isSuccess}">{{ notify }}</p>
+            <p class="text-center small fs-5" :class="{success:isSuccess,fail:!isSuccess}">{{ notify }}</p>
           </div>
     </div>
 </template>
@@ -47,6 +47,7 @@ export default {
             if(response.status === 200){
                 this.isSuccess = true
                 this.notify = 'your request is sent successfully, wait the response'
+                this.message = ''
             }
            }
            catch(err){
@@ -75,6 +76,10 @@ textarea{
 }
 textarea:focus{
     background-color: #0f0e1c;
+}
+.backbtn{
+    background: none;
+    border: none;
 }
 .success{
     color: green;

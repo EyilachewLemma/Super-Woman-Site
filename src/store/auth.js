@@ -16,7 +16,7 @@ export default {
             state.isAuthenticated = payload;
         },
         setUser(state, payload) {
-            console.log('loge In user = ', payload)
+            console.log('logeed In user  = ', payload)
             state.user = payload;
         },
     },
