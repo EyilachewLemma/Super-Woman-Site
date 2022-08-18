@@ -5,19 +5,19 @@
             <button class="border interestBtn  me-2 text-white p-1" v-for="field in fields" :key="field.id"  @click="filterBlogsByFields(field.id)">{{field.title}}</button>
         </div>
     <div class="row mx-2 mx-lg-3">
-      <div class="col-sm-6 col-md-4 col-lg-3 mt-4" v-for="blog in blogs.data" :key="blog.id">
+      <div class="col-sm-6 col-md-4 col-lg-3 mt-5" v-for="blog in blogs.data" :key="blog.id">
       <div class="row">
         <div class="col-6 col-sm-12 blogImg">
        <router-link :to="{name:'BlogDetail',params:{blogId:blog.id}}">
         <img :src="blog.image?.path" alt="role model image" class="img-fluid rounded w-100" /></router-link>
         </div>
         <div class="col-6 col-sm-12 text-white">
-            <div class="my-1 fs-5 fw-bold">{{blog.blog_title}}</div>
+            <div class="my-1 fs-4 fw-bold">{{blog.blog_title}}</div>
         <div class="d-flex justify-content-between mt-md-3 align-items-center">
             <div class="issue">{{blog.time_take_to_read}} min read</div>
           <div class="issue">ISSUE Date {{formatDate(blog.created_at)}}</div>
         </div>
-        <div class="mt-md-2 text-white detailContent">{{blog.blog_intro}}</div>
+        <div class="mt-md-2 text-white detailContent  fw-bold d-none d-md-block">{{blog.blog_intro}}</div>
         </div>
         </div>
       </div>
@@ -126,7 +126,7 @@ methods: {
   transition: all 1s;
 }
 .blogImg img:hover{
-  transform: scale(1.5);
+  transform: scale(1.2);
 }
 .issue {
   color: #f69f83;

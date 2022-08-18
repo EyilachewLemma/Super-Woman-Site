@@ -392,12 +392,12 @@ export default {
           this.$refs[elementId].focus();
           this.verificationCodes.push(event.target.value);
           console.log('enterd code = ',event.target.value)
-          console.log("length of code = ", this.verificationCodes.length);
+          console.log("length of code = ", this.verificationCodes?.length);
         });
       } else if (elementId === "codeSix") {
         document.getElementById("code6").blur();
         this.verificationCodes.push(event.target.value);
-        console.log("length of code = ", this.verificationCodes.length);
+        console.log("length of code = ", this.verificationCodes?.length);
         this.isDisabled = false;
         
       }
@@ -410,8 +410,8 @@ export default {
       this.verificationCodes.push(this.code4)
       this.verificationCodes.push(this.code5)
       this.verificationCodes.push(this.code6)
-      console.log('length of code sent to server=',this.confirmVerification.length)
-      if (this.verificationCodes.length * 1 === 6) {
+      // console.log('length of code sent to server=',this.confirmVerification?.length)
+      if (this.verificationCodes?.length * 1 === 6) {
         this.isLoading = true;
         var credential = {
           otp: this.verificationCodes.join(""),

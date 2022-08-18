@@ -131,11 +131,18 @@ export default {
       this.$router.push({name:'SignUp'})
     },
    async gotoChatRoom(){
-      await apiClient.get('user/set_messages_seen')
+    if(this.user?.message_no){
+    var response =  await apiClient.get('user/set_messages_seen')
+    if(response.status ===200){
       this.$router.push({name:'Chat'})
       var user = this.user
       user.message_no = 0
       this.$store.commit('setUser',user)
+    }
+    }
+    else{
+       this.$router.push({name:'Chat'})
+    }
      
     },
     gotoLogin() {

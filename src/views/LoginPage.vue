@@ -37,7 +37,7 @@
               </span>
               <span v-else>Login</span>
             </button>
-            <p class="text-danger text-center small">{{ notify }}</p>
+            <p class="text-danger text-center">{{ notify }}</p>
           </div>
           <div class="d-flex mt-3">
             <p class="text-white me-2">Don't have an account?</p>
@@ -237,12 +237,12 @@ export default {
           localStorage.setItem("tokenu", response.data.access_token);
           console.log("user loged in = ", response.data);
         }
-        if (response.status === 200) {
+        else if (response.status === 200) {
           this.notify = "faild to send verification code";
         }
       }
       catch(err){
-        this.notify = 'faild to login'
+        this.notify = 'Account does not exist'
       }
        finally {
         this.isLoading = false;
@@ -250,7 +250,7 @@ export default {
     },
      backToLoginInfoModal() {
       this.loginConfirmModal.hide();
-      this.logIninfoModal.show();
+      this.isLogin = true;
     },
      async resendLoginCode() {
       this.emptyCode()
@@ -310,10 +310,6 @@ export default {
       fileApiClient.defaults.headers.common["Authorization"] = `Bearer ${response.data.access_token}`;
       this.$store.commit("setUser", response.data.user);
        localStorage.setItem("tokenu", response.data.access_token);
-      // this.$store.commit("setIsAuthenticated", true);
-      // let user = response.data.user;     
-      // localStorage.setItem("supUser", JSON.stringify(user));
-      // localStorage.setItem("isLegalUser", true);
       let toPath = this.$route.query.to || "/";
       this.$router.push(toPath);
     },

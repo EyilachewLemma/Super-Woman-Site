@@ -11,7 +11,7 @@
           <button v-else @click="likeBlog()" class="likeBtn fs-4 text-white"><i class="fas fa-thumbs-up"></i></button>
          </div>
           <p class="mt-3 fs-5">
-             <a href="#giveComment" class="ms-4 fs-5 text-white text-decoration-none"><i class="fas fa-comment-dots"></i></a>
+             <a href="#giveComment" class="fs-5 text-white text-decoration-none"><i class="fas fa-comment-dots"></i></a>
             </p>
             <div class="position-relative">
               <button @click="shareControl()" class="likeBtn text-white fs-4"><i class="fa-solid fa-share-nodes"></i></button>
@@ -22,7 +22,7 @@
             </div>
        </div>
     </div>
-    <div class="mainContent px-3 px-lg-5 pt-3 pt-lg-5">
+    <div class="mainContent px-2 px-lg-5 pt-3 pt-lg-5">
    <div class="fs-1 fw-bold pt-3">
     <span class="text-white">{{blogDetail.blog_title}}</span>
 </div>
@@ -32,12 +32,19 @@
 </div>
 <div class="d-flex mt-3">
   <div class="issue">{{formatDate(blogDetail.created_at)}}</div>
-  <div class="d-flex ms-auto">
-  <button class="text-white fs-4 me-3 bgnone"><i class="fab fa-facebook-square"></i></button>
-  <button class="text-white fs-4 me-3 bgnone"><i class="fab fa-instagram-square"></i></button>
-  <button class="text-white fs-4 me-3 bgnone"><i class="fab fa-twitter-square"></i></button>
-  <button class="text-white fs-4 me-3 bgnone"><i class="fab fa-linkedin"></i></button>
-  <button class="text-white fs-4 bgnone"></button>
+  <div class="d-flex justify-content-center ms-auto">
+        <div class="me-3">
+          <a  href="https://www.facebook.com/SuperWomanEthiopia/" class="text-white fs-4 text-decoration-none"><i class="fab fa-facebook-square"></i></a>
+        </div>
+        <div class="me-3">
+          <router-link to="#" class="text-white fs-4 text-decoration-none"><i class="fab fa-instagram-square"></i></router-link>
+        </div>
+        <div class="me-3">
+          <a href="https://twitter.com/eyilachew_lema"  class="text-white fs-4 text-decoration-none"><i class="fab fa-twitter-square"></i></a>
+        </div>
+        <div class="me-3">
+          <a href="https://www.linkedin.com/in/eyilachew-lemma-072485213/" class="text-white fs-4 text-decoration-none"><i class="fab fa-linkedin"></i></a>
+        </div>
   </div>
 </div>
   <div class="mt-3 blogImg">
@@ -51,11 +58,18 @@
     <button v-else @click="likeBlog()" class="likeBtn fs-4 text-white"><i class="fas fa-thumbs-up"></i></button>
    <a href="#giveComment" class="ms-4 fs-5 text-white text-decoration-none">{{blogDetail?.comment}}<i class="fas fa-comment-dots ms-2"></i></a>
   <div class="d-flex ms-auto">
-     <button class="text-white fs-4 me-3 bgnone"><i class="fab fa-facebook-square"></i></button>
-  <button class="text-white fs-4 me-3 bgnone"><i class="fab fa-instagram-square"></i></button>
-  <button class="text-white fs-4 me-3 bgnone"><i class="fab fa-twitter-square"></i></button>
-  <button class="text-white fs-4 me-3 bgnone"><i class="fab fa-linkedin"></i></button>
-  <button class="text-white fs-4 bgnone"></button>
+      <div class="me-3">
+          <a  href="https://www.facebook.com/SuperWomanEthiopia/" class="text-white fs-4 text-decoration-none"><i class="fab fa-facebook-square"></i></a>
+        </div>
+        <div class="me-3">
+          <router-link to="#" class="text-white fs-4 text-decoration-none"><i class="fab fa-instagram-square"></i></router-link>
+        </div>
+        <div class="me-3">
+          <a href="https://twitter.com/DYenesew"  class="text-white fs-4 text-decoration-none"><i class="fab fa-twitter-square"></i></a>
+        </div>
+        <div class="me-3">
+          <a href="https://www.linkedin.com/in/dayan-mulu-yenesew-558a25155/" class="text-white fs-4 text-decoration-none"><i class="fab fa-linkedin"></i></a>
+        </div>
   <div class="d-md-none">
               <button @click="shareControl()" class="likeBtn text-white fs-4"><i class="fa-solid fa-share-nodes"></i></button>
               <div v-if="isShare" class="socialMediasm d-flex flex-column border rounded p-2">
@@ -95,7 +109,7 @@
       </div>
       <!-- related blogs displayed only in md and lessthan screen -->
         <div class="p-4 d-lg-none">
-          <p class="text-white">Related Role Models</p>
+          <p class="text-white">Related Blogs</p>
         <div class="row">
           <div v-for="relatedBlog in relatedBlogs" :key="relatedBlog.id" class="mt-4 col-md-6 col-lg-4 relatedImgBox">
         <div @click="fetchRelatedBlogDetail(relatedBlog.id)">
@@ -108,10 +122,10 @@
         </div>
         </div>
         <!-- related blogs displayed only in lg screen -->
-         <div class="relatedBlog ms-auto  d-none d-lg-block px-3 pt-3 pt-lg-5">
+         <div class="relatedBlog ms-auto  d-none d-lg-block px-3 p-3">
            <div class="relatedBloglg mx-3">
             <p class="text-white">Related Blogs</p>
-        <div v-for="relatedBlog in relatedBlogs" :key="relatedBlog.id" class="mt-2 w-100">
+        <div v-for="relatedBlog in relatedBlogs" :key="relatedBlog.id" class="mt-4 w-100">
         <div @click="fetchRelatedBlogDetail(relatedBlog.id)">
           <div>
              <img :src="relatedBlog.image.path" alt="related role model" class="img-fluid relatedBlogs" /> 
@@ -131,7 +145,7 @@
           <p class="fs-4 fw-bold">In order to react with the blog</p>
           <p class="fs-4 fw-bold">Content First you have to Login</p>
           <p class="fs-4 fw-bold"> or if you didn't have Account create Account</p>
-          <div class="d-flex justify-content-center fs-3">
+          <div class="d-flex justify-content-center fs-5">
             <button @click="gotoLoginFirst()" class="me-3 loginorSignUp text-primary">Login</button>
             <span class="me-3">Or</span>
             <button @click="createAccountFirst()" class="text-primary loginorSignUp">Create Account</button>
@@ -233,10 +247,10 @@ export default {
       if(!this.v$.comment.$error){
         var response = await apiClient.post(`user/add_blog_comment/${this.blogId}`,{comment:this.comment})
         if(response.status === 200){
-          this.comment =''
            this.comments.unshift(response.data)
            this.blogDetail.comment+=1
            this.v$.$reset()
+           this.comment =''
            document.getElementById('giveComment').blur()
            
         }
@@ -279,8 +293,9 @@ export default {
   this.isShare = false
     },
     gotoLoginFirst(){
-      this.notifyModal.hide()
       this.$router.push({name:'Login'})
+      this.notifyModal?.hide()
+      console.log(' first login')
     },
     createAccountFirst(){
       this.notifyModal.hide()
@@ -296,7 +311,7 @@ export default {
 }
 .sideContent{
   background-color: #14141f;
-  width: 10%;
+  width: 20%;
   border-right: 0.5px solid rgb(37, 36, 36);
 }
 .shareMedia{
@@ -376,22 +391,22 @@ export default {
 .relatedBlog{
   width: 20%;
    position: fixed;
-  top: 12%;
+  top: 14%;
+  right: 0%;
   overflow-y: scroll;
     background-color: #14141f;
    border-right: 0.5px solid rgb(145, 142, 142);
    cursor: pointer;
 
 }
-.relatedBlog::-webkit-scrollbar {
+ .relatedBlog::-webkit-scrollbar {
   display: none;
 }
 
-/* Hide scrollbar for IE, Edge and Firefox */
 .relatedBlog {
-  -ms-overflow-style: none;  /* IE and Edge */
-  scrollbar-width: none;  /* Firefox */
-}
+  -ms-overflow-style: none; 
+  scrollbar-width: none; 
+} 
 .loginorSignUp{
   border: none;
   background: none;
@@ -406,13 +421,14 @@ export default {
   .mainContent{
     width: 80%;
   }
-  .sideContent{
-    width: 20%;
-  }
+  
 }
 @media(min-width:992px){
   .mainContent{
-    width: 70%;
+    width: 68%;
+  }
+  .sideContent{
+    width: 10%;
   }
 }
 </style>

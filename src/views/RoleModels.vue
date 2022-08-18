@@ -1,6 +1,6 @@
 <template>
   <div class="recentRoleModels pb-5">
-    <div class="text-center text-white pt-5 pb-2">ALL PUBLISHED ROLE MODELS</div>
+    <div class="text-center text-white pt-5 pb-2 fs-4 fw-bold">ALL PUBLISHED ROLE MODELS</div>
     <div class="row mx-2 mx-lg-3">
       <div class="col-sm-6 col-md-4 col-lg-3 mt-4" v-for="roleModel in roleModels.data" :key="roleModel.id">
       <div class="row">

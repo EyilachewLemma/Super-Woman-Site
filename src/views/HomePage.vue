@@ -49,11 +49,11 @@
             @mouseenter="decreaseHeight()"
             @mouseleave="increaseHeight()"
           >
-             <router-link to="#" class="leftBtn border rounded shadow-sm p-2">See More</router-link>
+           <router-link :to="{name:'RoleModelDetail',params:{rolemodelId:2}}" class="leftBtn border rounded shadow-sm p-2">Read</router-link>
             <img src="../assets/bety2.jpg" alt="sample image" class="img-fluid leftImg" />
           </div>
           <div class="rightImageContainer" :class="{ onHover:isHover}">
-            <router-link to="#" class="rightBtn border rounded shadow-sm p-2">See More</router-link>
+          <router-link :to="{name:'RoleModelDetail',params:{rolemodelId:3}}" class="rightBtn border rounded shadow-sm p-2">Read</router-link>
             <img src="../assets/bety.jpg" alt="sample image" class="img-fluid rightImg" />
           </div>
         </div>
@@ -68,11 +68,11 @@
         @mouseenter="decreaseHeight()"
         @mouseleave="increaseHeight()"
       >
-        <router-link to="#" class="leftBtn border rounded shadow-sm p-2">See More</router-link>
+      <router-link :to="{name:'RoleModelDetail',params:{rolemodelId:2}}" class="leftBtn border rounded shadow-sm p-2">Read</router-link>
         <img src="../assets/bety2.jpg" alt="sample image" class="img-fluid leftImg" />
       </div>
       <div class="rightImageContainer smallScreen" :class="{ onHover:isHover}">
-        <router-link to="#" class="rightBtn border rounded shadow-sm p-2">See More</router-link>
+      <router-link :to="{name:'RoleModelDetail',params:{rolemodelId:3}}" class="rightBtn border rounded shadow-sm p-2">Read</router-link>
         <img src="../assets/bety.jpg" alt="sample image" class="img-fluid rightImg" />
       </div>
     </div>
@@ -114,7 +114,7 @@
   </div>
   <!-- rolemodel started -->
   <div class="recentRoleModels pb-5">
-    <div class="text-center text-white py-5">RECENT PUBLISHED ROLE MODELS</div>
+    <div class="text-center text-white py-5 fw-bold fs-3">RECENT PUBLISHED ROLE MODELS</div>
     <div class="row mx-2 rolemodelRow">
       <div
         class="col-md-6 col-lg-4 mt-3 px-4"
@@ -162,7 +162,7 @@
   <!-- rolemodel end -->
   <div class="blogSection">
     <div class="recentBlogs">
-      <div class="text-center text-white py-5">RECENT PUBLISHED BLOGS</div>
+      <div class="text-center text-white py-5 fw-bold fs-3">RECENT PUBLISHED BLOGS</div>
     </div>
     <div class="slightDark">
       <div class="row mx-2 mx-lg-3">
@@ -196,7 +196,7 @@
         </div>
       </div>
       <div class="text-center py-5">
-        <button class="btn border rounded text-white">
+        <button @click="gotoBlogsPage()" class="btn border rounded text-white">
           VIEW MORE BLOGS
           <span class="fs-5 ms-5">
             <i class="fas fa-arrow-right"></i>
@@ -306,6 +306,13 @@ export default {
     roleModels() {
       return this.$store.getters.roleModels;
     },
+    feachredRoleModel(){
+      var roleModels = this.roleModels.filter(roleModel=>{
+        return roleModel.is_featured
+      })
+      console.log('featured role models',roleModels)
+      return roleModels
+    },
     blogs() {
       return this.$store.getters.blogs;
     },
@@ -329,6 +336,9 @@ export default {
       var month = date.getMonth();
       var day = date.getDate();
       return month * 1 + 1 + "/" + day + "/" + year;
+    },
+    gotoBlogsPage(){
+      this.$router.push({name:'Blogs'})
     },
    async subscribe(){
       this.v$.userInfo.$validate()

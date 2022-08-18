@@ -109,7 +109,7 @@ export default createStore({
         },
         async fetchRoleModels({ commit }, queryObject) {
             try {
-                commit('setIsLoading', true)
+                // commit('setIsLoading', true)
                 var response = await apiClient.get(`user/get_role_models?lang=${queryObject.lang}&per_page=${queryObject.perPage}`)
                 if (response.status === 200) {
                     commit('setRolemodels', response.data)
@@ -123,7 +123,7 @@ export default createStore({
         },
         async fetchBlogs({ commit }, queryObject) {
             try {
-                commit('setIsLoading', true)
+                // commit('setIsLoading', true)
                 var response = await apiClient.get(`user/get_blogs?lang=${queryObject.lang}&search=${queryObject?.searchBy}&filter=${queryObject?.filterBy}&per_page=${queryObject.perPage}`)
                 if (response.status === 200) {
                     commit('setBlogs', response.data)

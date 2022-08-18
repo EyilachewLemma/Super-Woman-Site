@@ -20,13 +20,26 @@ export default {
     TheHeader,
     TheFooter
   },
+  data() {
+    return {
+      pageCounter:1,
+      queryObject:{
+        perPage:3,
+        searchBy:'',
+        filterBy:''
+      },
+    }
+  },
+
   created() {
     let selectedLang = localStorage.getItem('language')
+    this.queryObject.lang = selectedLang ||'en'
     this.$store.dispatch("fetchFields");
      this.$store.dispatch('fetchLanguages') 
      this.$store.dispatch("fetchEducationLebles");
-    this.$store.dispatch("fetchRoleModels",{lang:selectedLang ||'en',perPage:3});
-    this.$store.dispatch("fetchBlogs",{lang:selectedLang ||'en',perPage:4});
+    this.$store.dispatch("fetchRoleModels",this.queryObject);
+    this.queryObject.perPage = 4
+    this.$store.dispatch("fetchBlogs",this.queryObject);
     
     
   },

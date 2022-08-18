@@ -48,12 +48,19 @@ Your browser does not support the audio element.
    <span v-if="roleModelDetails.is_liked === 1" class="fs-4 text-primary"><i class="fas fa-thumbs-up"></i></span>
     <button v-else @click="likeRoleModel()" class="likeBtn fs-4 text-white"><i class="fas fa-thumbs-up"></i></button>
    <a href="#giveComment" class="ms-4 fs-5 text-white">{{roleModelDetails?.comment}}<i class="fas fa-comment-dots ms-2"></i></a>
-  <div class="d-flex ms-auto">
-     <button class="text-white fs-4 me-3 socialLink"><i class="fab fa-facebook-square"></i></button>
-  <button class="text-white fs-4 me-3 socialLink"><i class="fab fa-instagram-square"></i></button>
-  <button class="text-white fs-4 me-3 socialLink"><i class="fab fa-twitter-square"></i></button>
-  <button class="text-white fs-4 me-3 socialLink"><i class="fab fa-linkedin"></i></button>
-  <button class="text-white fs-4 socialLink"></button>
+  <div class="d-flex ms-auto align-items-center">
+      <div class="me-3">
+          <a  href="https://www.facebook.com/SuperWomanEthiopia/" class="text-white fs-4 text-decoration-none"><i class="fab fa-facebook-square"></i></a>
+        </div>
+        <div class="me-3">
+          <router-link to="#" class="text-white fs-4 text-decoration-none"><i class="fab fa-instagram-square"></i></router-link>
+        </div>
+        <div class="me-3">
+          <a href="https://twitter.com/DYenesew"  class="text-white fs-4 text-decoration-none"><i class="fab fa-twitter-square"></i></a>
+        </div>
+        <div class="me-3">
+          <a href="https://www.linkedin.com/in/dayan-mulu-yenesew-558a25155/" class="text-white fs-4 text-decoration-none"><i class="fab fa-linkedin"></i></a>
+        </div>
    <div class="position-relative">
               <button @click="shareControl()" class="likeBtn text-white fs-4"><i class="fa-solid fa-share-nodes"></i></button>
               <div v-if="isShare" class="socialMedia d-flex flex-column border rounded p-2">
@@ -116,7 +123,7 @@ Your browser does not support the audio element.
           <p class="fs-2 fw-bold">Hey Dear User 👋</p>
           <p class="fs-4 fw-bold">In order to react with the blog</p>
           <p class="fs-4 fw-bold">Content First you have to Login</p>
-          <p class="fs-4 fw-bold"> or if yuo didn't have Account creat Account</p>
+          <p class="fs-4 fw-bold"> or if you didn't have Account Create Account</p>
           <div class="d-flex justify-content-center fs-3">
             <button @click="gotoLoginFirst()" class="me-3 loginorSignUp text-primary">Login</button>
             <span class="me-3">Or</span>
@@ -220,9 +227,10 @@ export default {
       if(!this.v$.comment.$error){
         var response = await apiClient.post(`user/add_comment/${this.$route.params.rolemodelId}`,{comment:this.comment})
         if(response.status === 200){
-          this.comment = ''
            this.comments.unshift(response.data)
            this.roleModelDetails.comment+=1
+           this.v$.$reset()
+          this.comment = ''
 
         }
       
@@ -250,11 +258,11 @@ export default {
       }
     },
      gotoLoginFirst(){
-      this.notifyModal.hide()
+      this.firstVerifyModal.hide()
       this.$router.push({name:'Login'})
     },
     createAccountFirst(){
-      this.notifyModal.hide()
+      this.firstVerifyModal.hide()
       this.$router.push({name:'SignUp'})
     },
     shareControl(){
@@ -335,10 +343,13 @@ a{text-decoration: none;}
   position: absolute;
   right: 2%;
 }
-/* .relatedRoleModels{
-  width: 20vw;
-  height: 20vh;
-}  */
+.loginorSignUp{
+  border: none;
+  background: none;
+}
+.loginorSignUp:hover{
+  text-decoration: underline;
+}
 .warning input {
   border: 1px red solid;
 }

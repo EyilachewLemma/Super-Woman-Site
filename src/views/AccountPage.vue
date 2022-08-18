@@ -53,7 +53,7 @@
           <div class="detailProfileCircle rounded-circle mt-4">
         <img
           v-if="!image"
-          src="../assets/rolemodel1.jpg"
+          src="../assets/img_avatar2.png"
           alt="admin profile picture"
           class="img-fluid radius-circled"
         />

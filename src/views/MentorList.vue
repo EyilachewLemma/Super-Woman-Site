@@ -37,9 +37,9 @@
         </div>
        </div> -->
        <!-- card start -->
-   <div class="d-none d-md-block mt-4">
+   <div class="d-none d-md-block mt-4 px-3 px-lg-5">
         <div class="row row-cols-1 row-cols-md-3 row-cols-lg-4 g-4 rowCard">
-  <div class="col" v-for="mentor in mentors.data" :key="mentor.id">
+  <div class="col" v-for="mentor in mentors" :key="mentor.id">
     <div class="card h-100">
          <img v-if="mentor.profile_picture"  :src="mentor.profile_picture" alt="mentor profile" class="card-img-top img-fluid">
           <img v-else  src="../assets/img_avatar2.png" alt="mentor profile" class="card-img-top img-fluid">
@@ -69,7 +69,7 @@
         </div>
         <hr>
         <div class="mt-3 px-3">
-            <div class="pb-3" v-for="mentor in mentors.data"  :key="mentor.id">
+            <div class="pb-3" v-for="mentor in mentors"  :key="mentor.id">
                     <div @click="viewMentorProfile(mentor)" class="d-flex profileContainer">
                      <div class="px-1 py-3 me-2">
              <div v-if="mentor.profile_picture" class="smProfileCircle rounded-circle text-white">
@@ -156,6 +156,7 @@ export default {
         return {
             mentors:[],
             availabilities:[],
+            filterableMentor:[],
             experiences:[],
             mentorDetails:[],
             mentorId:null,
@@ -189,7 +190,8 @@ export default {
             try{
                 var response = await apiClient.get(`user/mentors?search=${this.searchBy}&filter=${this.filterBy}`)
                 if(response.status === 200){
-                    this.mentors = response.data
+                    this.mentors = response.data?.data
+                    this.filterableMentor = response.data.data
                     console.log('mentors =',response.data)
                 }
             }
@@ -229,20 +231,41 @@ export default {
             this.fetchMentors()
         },
         filterMentors(event){
-            if(event.target.value === 'all'){
-                this.filterBy = ''
-                this.fetchMentors()
-            }
-            else{
-               this.filterBy = event.target.value
-               this.fetchMentors()
-            }
+            // if(event.target.value === 'all'){
+            //     this.filterBy = ''
+            //     this.fetchMentors()
+            // }
+            // else{
+            //    this.filterBy = event.target.value
+            //    this.fetchMentors()
+            // }
+                 if(event.target.value === 'all'){
+          this.filterBy = ""
+          this.fetchMentors(); 
+     
+      }
+      else{
+        var filteredMentors = this.filterableMentor.filter(mentor=>{
+        return mentor.field_id*1 === event.target.value*1     
+      })
+      this.mentors = filteredMentors
+      console.log('field id=',event.target.value)
+      }
           
           
         },
         filterMentorsByFields(id){
-            this.filterBy = id
-               this.fetchMentors()
+               if(id === 'all'){
+          this.filterBy = ""
+          this.fetchMentors(); 
+     
+      }
+      else{
+        var filteredMentors = this.filterableMentor.filter(mentor=>{
+        return mentor.field_id*1 === id*1     
+      })
+      this.mentors = filteredMentors
+      }
         }
     },
 }
