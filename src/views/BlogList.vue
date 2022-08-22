@@ -69,6 +69,13 @@ computed:{
     },
 
 },
+watch:{
+    lang(value){
+      this.queryObject.lang = value
+    this.$store.dispatch("fetchBlogs",this.queryObject);
+
+    }
+  },
 methods: {
   fetchBlogs(queryObject){
      this.$store.dispatch('fetchBlogs',queryObject)

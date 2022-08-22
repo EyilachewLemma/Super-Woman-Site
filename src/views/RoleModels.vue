@@ -68,6 +68,11 @@ computed:{
   },
 
 },
+watch:{
+    lang(value){
+     this.$store.dispatch('fetchRoleModels',{lang:value,perPage:this.perPage})
+    }
+  },
 methods: {
     formatDate(createdAt){
      var date = new Date(createdAt)

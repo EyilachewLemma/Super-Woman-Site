@@ -14,7 +14,7 @@
         </div>
         <div class="text-white align-self-center">{{myMentor.first_name+' '+myMentor.last_name}}</div>
       </div>
-      <div class="contentContainer pb-5 bg-primary" id="myDiv">
+      <div class="contentContainer pb-5" id="myDiv">
         <div class="px-2 pt-3" v-for="(message,index) in messageDatas" :key="message.id">
           <div v-if="message.sender === 'mentor'" class="d-flex me-5">
             <div class="smProfileCircle rounded-circle text-white me-2 align-self-end">

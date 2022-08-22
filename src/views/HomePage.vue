@@ -267,6 +267,11 @@ export default {
       isHover: false,
       v$: useValidate(),
      userInfo: {},
+     queryObject:{
+        perPage:3,
+        searchBy:'',
+        filterBy:''
+      },
       
       isLoading: false,
       notify: "",
@@ -290,12 +295,7 @@ export default {
       },
       
     };
-  },
-
-  created() {
-    
-  },
-  
+  },  
   computed: {
     fields() {
       return this.$store.getters.fields;
@@ -316,7 +316,19 @@ export default {
     blogs() {
       return this.$store.getters.blogs;
     },
+     lang() {
+      return this.$store.getters.lang;
+    },
     
+  },
+  watch:{
+    lang(value){
+      this.queryObject.lang = value
+      this.queryObject.perPage = 4
+    this.$store.dispatch("fetchBlogs",this.queryObject);
+    this.queryObject.perPage = 3
+    this.$store.dispatch("fetchRoleModels",this.queryObject);
+    }
   },
   methods: {
     decreaseHeight() {
@@ -347,9 +359,11 @@ export default {
           var response = await apiClient.post('user/subscribe',this.userInfo)
            if(response.status === 200){
             this.$toast.success(`thank you! we will inform updated information`);
+            this.userInfo = {}
+            this.v$.$reset()
            }
            if(response.status === 201){
-            this.$toast.success(`already subscribed !`);
+            this.$toast.error(`already subscribed !`);
            }
         }      
       catch(err){

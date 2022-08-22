@@ -79,7 +79,7 @@
       </div>
     </div>
   </div>
-  <span>{{fields}}</span>
+  <!-- <span>{{fields}}</span> -->
 </div>
 </template>
 <script>

@@ -22,8 +22,7 @@ export default {
   },
   data() {
     return {
-      pageCounter:1,
-      queryObject:{
+        queryObject:{
         perPage:3,
         searchBy:'',
         filterBy:''
@@ -51,12 +50,7 @@ export default {
       return this.$store.getters.lang
     }
   },
-  watch:{
-    lang(value){
-    this.$store.dispatch("fetchBlogs",{lang:value ||'en',perPage:4});
-    this.$store.dispatch("fetchRoleModels",{lang:value ||'en',perPage:3});
-    }
-  },
+  
   methods: {}
 };
 </script>
